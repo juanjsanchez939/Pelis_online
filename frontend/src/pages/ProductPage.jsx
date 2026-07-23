@@ -1,11 +1,20 @@
 import { useContext, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { products as initialProducts } from "../mocks/products.json";
+import axios from "axios";
 import { useFavs } from "../hooks/useFavs.js";
 import { SnackbarContext } from "../context/snackbarContext.js";
 import { UserContext } from "../context/UserContext.js";
 import "./ProductPage.css";
 import { HeartIcon, HeartFilledIcon } from "../components/icons.jsx";
+
+const TMDB_IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
+
+function getImageUrl(thumbnail) {
+  if (!thumbnail) return "/portadas/default.jpg";
+  if (thumbnail.startsWith("http")) return thumbnail;
+  if (thumbnail.startsWith("/portadas/")) return thumbnail;
+  return `${TMDB_IMAGE_BASE_URL}${thumbnail}`;
+}
 
 function Stars({ rating }) {
   const full = Math.floor(rating);
@@ -25,6 +34,8 @@ export default function ProductPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
+  const [movie, setMovie] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!user) {
@@ -36,19 +47,37 @@ export default function ProductPage() {
     window.scrollTo({ top: 0 });
   }, [id]);
 
-  const movie = initialProducts.find((p) => p.id === parseInt(id));
-
-  if (!user) return <p className="auth-message">Inicia sesión para ver esta película</p>;
-  if (!movie) return <p>Película no encontrada</p>;
+  useEffect(() => {
+    const fetchMovie = async () => {
+      try {
+        const res = await axios.get(`http://localhost:3001/movies/${id}`);
+        setMovie(res.data);
+      } catch (e) {
+        console.error('Error fetching movie:', e);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchMovie();
+  }, [id]);
 
   const { toggleFav, isFav } = useFavs();
   const { showSnackbar } = useContext(SnackbarContext);
-
-  const inFav = isFav(movie.id);
-
   const [newComment, setNewComment] = useState("");
   const [commentRating, setCommentRating] = useState(5);
-  const [comments, setComments] = useState(movie.comments || []);
+  const [comments, setComments] = useState([]);
+
+  useEffect(() => {
+    if (movie) {
+      setComments(movie.comments || []);
+    }
+  }, [movie]);
+
+  if (!user) return <p className="auth-message">Inicia sesión para ver esta película</p>;
+  if (loading) return <p className="auth-message">Cargando película...</p>;
+  if (!movie) return <p>Película no encontrada</p>;
+
+  const inFav = isFav(movie.id);
 
   const handleFavClick = () => {
     toggleFav(movie);
@@ -80,7 +109,7 @@ export default function ProductPage() {
 
         <div className="product-container">
           <div className="product-image">
-            <img src={movie.thumbnail} alt={movie.title} />
+            <img src={getImageUrl(movie.thumbnail)} alt={movie.title} />
           </div>
 
           <div className="product-info">
@@ -88,7 +117,7 @@ export default function ProductPage() {
             <p className="year">{movie.year}</p>
             <p className="duration">{movie.duration}</p>
             <p className="director">Director: {movie.director}</p>
-            <p className="category-tag">{movie.category[0]}</p>
+            <p className="category-tag">{movie.category?.[0]}</p>
             {movie.rating && <Stars rating={movie.rating} />}
 
             <button className="buy-button" onClick={handleFavClick}>
@@ -122,7 +151,7 @@ export default function ProductPage() {
             <h4>Año: {movie.year}</h4>
             <h4>Duración: {movie.duration}</h4>
             <h4>Director: {movie.director}</h4>
-            <h4>Género: {movie.category[0]}</h4>
+            <h4>Género: {movie.category?.[0]}</h4>
           </div>
         </section>
 

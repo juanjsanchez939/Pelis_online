@@ -72,7 +72,7 @@ export default function UserPanel() {
                     <img src={movie.thumbnail} alt={movie.title} />
                     <div className="fav-card-info">
                       <h3>{movie.title}</h3>
-                      <p>{movie.year} | {movie.category[0]}</p>
+                      <p>{movie.year} | {movie.category?.[0]}</p>
                     </div>
                   </Link>
                 </div>

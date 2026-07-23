@@ -2,7 +2,7 @@ import { useContext, useState, useRef, useEffect, useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext.js";
 import { FiltersContext } from "../context/FiltersContext.js";
-import { products as allProducts } from "../mocks/products.json";
+import axios from "axios";
 import "./navbar.css";
 
 const DarkIcon = () => (
@@ -31,8 +31,21 @@ const Navbar = ({ theme, toggleTheme }) => {
   const navigate = useNavigate();
   const [searchText, setSearchText] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
+  const [allProducts, setAllProducts] = useState([]);
   const searchRef = useRef(null);
   const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    const fetchMovies = async () => {
+      try {
+        const res = await axios.get('http://localhost:3001/movies');
+        setAllProducts(res.data);
+      } catch (e) {
+        console.error('Error fetching movies for search:', e);
+      }
+    };
+    fetchMovies();
+  }, []);
 
   const results = useMemo(() => {
     if (searchText.trim().length < 2) return [];
@@ -43,7 +56,7 @@ const Navbar = ({ theme, toggleTheme }) => {
         p.description.toLowerCase().includes(query)
       )
       .slice(0, 8);
-  }, [searchText]);
+  }, [searchText, allProducts]);
 
   useEffect(() => {
     const handler = (e) => {
@@ -126,10 +139,10 @@ const Navbar = ({ theme, toggleTheme }) => {
                   className="search-result-item"
                   onClick={() => handleResultClick(movie.id)}
                 >
-                  <img src={movie.thumbnail} alt={movie.title} />
+                  <img src={(movie.thumbnail?.startsWith("/portadas/") || movie.thumbnail?.startsWith("http") || !movie.thumbnail) ? (movie.thumbnail || "/portadas/default.jpg") : `https://image.tmdb.org/t/p/w500${movie.thumbnail}`} alt={movie.title} />
                   <div className="search-result-info">
                     <span className="search-result-title">{movie.title}</span>
-                    <span className="search-result-meta">{movie.year} | {movie.category[0]} | ★ {movie.rating}</span>
+                    <span className="search-result-meta">{movie.year} | {movie.category?.[0]} | ★ {movie.rating}</span>
                   </div>
                 </div>
               ))}

@@ -23,10 +23,4 @@ export const API_BASE_URL = devHost
       default: 'http://localhost:3001',
     });
 
-export const IMAGE_BASE_URL = devHost
-  ? `http://${devHost}:5173`
-  : Platform.select({
-      android: 'http://10.0.2.2:5173',
-      ios: 'http://localhost:5173',
-      default: 'http://localhost:5173',
-    });
+export const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';

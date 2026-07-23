@@ -5,7 +5,24 @@ import { getDependency } from "../libs/dependencies.js";
 export class MovieService {
   static async get(filter) {
     const MovieModel = getDependency('MovieModel');
-    return await MovieModel.find(filter);
+    const movies = await MovieModel.find(filter);
+    return movies.map(m => {
+      const obj = m.toObject();
+      obj.id = m._id.toString();
+      return obj;
+    });
+  }
+
+  static async getById(id) {
+    if (!id) {
+      throw new InvalidArgumentException('Falta el parámetro id.');
+    }
+    const MovieModel = getDependency('MovieModel');
+    const movie = await MovieModel.findById(id);
+    if (!movie) return null;
+    const obj = movie.toObject();
+    obj.id = movie._id.toString();
+    return obj;
   }
 
   static async create(movie) {
@@ -16,7 +33,9 @@ export class MovieService {
     const MovieModel = getDependency('MovieModel');
     const newMovie = new MovieModel(movie);
     await newMovie.save();
-    return newMovie;
+    const obj = newMovie.toObject();
+    obj.id = newMovie._id.toString();
+    return obj;
   }
 
   static async deleteById(id) {
@@ -45,6 +64,8 @@ export class MovieService {
     if (!movie) {
       throw new InvalidArgumentException('Película no encontrada.');
     }
-    return movie;
+    const obj = movie.toObject();
+    obj.id = movie._id.toString();
+    return obj;
   }
 }

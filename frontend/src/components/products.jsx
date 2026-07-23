@@ -4,11 +4,15 @@ import "./products.css";
 import { Link } from "react-router-dom";
 import { useContext } from "react";
 import { SnackbarContext } from "../context/snackbarContext.js";
+import { UserContext } from "../context/UserContext.js";
+
+const TMDB_IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 
 export function Products({ products, limit }) {
   const displayed = limit ? products.slice(0, limit) : products;
   const { toggleFav, isFav } = useFavs();
   const { showSnackbar } = useContext(SnackbarContext);
+  const { user } = useContext(UserContext);
 
   const handleFavAction = (movie) => {
     toggleFav(movie);
@@ -17,6 +21,13 @@ export function Products({ products, limit }) {
     } else {
       showSnackbar(`Agregaste "${movie.title}" a favoritos`, "success");
     }
+  };
+
+  const getImageUrl = (thumbnail) => {
+    if (!thumbnail) return "/portadas/default.jpg";
+    if (thumbnail.startsWith("http")) return thumbnail;
+    if (thumbnail.startsWith("/portadas/")) return thumbnail;
+    return `${TMDB_IMAGE_BASE_URL}${thumbnail}`;
   };
 
   return (
@@ -29,16 +40,17 @@ export function Products({ products, limit }) {
             <div key={movie.id} className="product-card" style={{ animationDelay: `${Math.min(idx * 0.05, 1)}s` }}>
               <Link to={`/product/${movie.id}`} className="product-link">
                 <div className="image-wrapper">
-                  <img src={movie.thumbnail} alt={movie.title} />
+                  <img src={getImageUrl(movie.thumbnail)} alt={movie.title} />
                   {movie.rating && (
                     <span className="rating-badge">★ {movie.rating.toFixed(1)}</span>
                   )}
                 </div>
                 <h3>{movie.title}</h3>
                 <p className="price">{movie.year}</p>
-                <p className="category-tag">{movie.category[0]}</p>
+                <p className="category-tag">{movie.category?.[0]}</p>
               </Link>
 
+              {user && (
               <button
                 className={`btn-fav ${fav ? "fav-active" : ""}`}
                 onClick={() => handleFavAction(movie)}
@@ -46,6 +58,7 @@ export function Products({ products, limit }) {
                 {fav ? <HeartFilledIcon /> : <HeartIcon />}
                 {fav ? " Favorito" : " Agregar a favoritos"}
               </button>
+              )}
             </div>
           );
         })}

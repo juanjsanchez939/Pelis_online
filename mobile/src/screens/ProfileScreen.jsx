@@ -87,7 +87,7 @@ export default function ProfileScreen({ navigation }) {
             <View style={styles.favInfo}>
               <Text style={[styles.favTitle, { color: theme.text }]} numberOfLines={2}>{item.title}</Text>
               <Text style={[styles.favMeta, { color: theme.textSecondary }]}>
-                {item.year} | {item.category[0]}
+                {item.year} | {item.category?.[0]}
               </Text>
             </View>
           </TouchableOpacity>

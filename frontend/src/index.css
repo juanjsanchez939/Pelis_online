@@ -142,3 +142,62 @@ a {
 .reveal {
   animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
 }
+
+.catalog-layout {
+  display: flex;
+  gap: 0;
+  min-height: 400px;
+}
+
+.catalog-content {
+  flex: 1;
+  padding: 0 16px;
+}
+
+.catalog-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 12px 16px;
+  margin-bottom: 12px;
+  border-bottom: 2px solid var(--border-color, rgba(255,255,255,0.06));
+}
+
+.tab-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 24px;
+  border: none;
+  border-radius: 8px 8px 0 0;
+  background: transparent;
+  color: var(--text-secondary, #aaa);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+}
+
+.tab-btn:hover {
+  color: var(--text-color, #fff);
+  background: rgba(255,255,255,0.05);
+}
+
+.tab-btn.active {
+  color: #e50914;
+  background: rgba(229, 9, 20, 0.08);
+}
+
+.tab-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: -14px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #e50914;
+}
+
+.tab-icon {
+  font-size: 18px;
+}

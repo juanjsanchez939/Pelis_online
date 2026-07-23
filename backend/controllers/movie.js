@@ -12,6 +12,15 @@ export function movie(app) {
     }
   );
 
+  app.get(
+    '/movies/:id',
+    async (req, res) => {
+      const movie = await MovieService.getById(req.params.id);
+      if (!movie) return res.status(404).send({ error: 'Película no encontrada' });
+      res.send(movie);
+    }
+  );
+
   app.post(
     '/movies',
     checkForRole('admin'),

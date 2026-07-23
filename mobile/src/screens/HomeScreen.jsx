@@ -1,8 +1,8 @@
-import React, { useState, useContext, useMemo } from 'react';
+import React, { useState, useContext, useMemo, useEffect } from 'react';
 import {
-  View, Text, TouchableOpacity, ScrollView, StyleSheet, RefreshControl,
+  View, Text, TouchableOpacity, ScrollView, StyleSheet, RefreshControl, ActivityIndicator,
 } from 'react-native';
-import { products as initialProducts } from '../assets/products.json';
+import { API_BASE_URL } from '../config';
 import { useFilters } from '../hooks/useFilters';
 import { useFavs } from '../hooks/useFavs';
 import { SnackbarContext } from '../contexts/SnackbarContext';
@@ -42,8 +42,23 @@ export default function HomeScreen({ navigation }) {
 
   const [refreshing, setRefreshing] = useState(false);
   const [selectedGenre, setSelectedGenre] = useState(null);
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const products = useMemo(() => initialProducts, []);
+  useEffect(() => {
+    const fetchMovies = async () => {
+      try {
+        const res = await fetch(`${API_BASE_URL}/movies`);
+        const data = await res.json();
+        setProducts(data);
+      } catch (e) {
+        console.error('Error fetching movies:', e);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchMovies();
+  }, []);
 
   const topRated = useMemo(() => {
     return [...products].sort((a, b) => b.rating - a.rating).slice(0, 10);
@@ -85,6 +100,11 @@ export default function HomeScreen({ navigation }) {
 
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
+      {loading ? (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color={theme.primary} />
+        </View>
+      ) : (
       <ScrollView
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={theme.primary} />}
       >
@@ -172,12 +192,14 @@ export default function HomeScreen({ navigation }) {
 
         <View style={{ height: 20 }} />
       </ScrollView>
+      )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
+  loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   grid: {
     flexDirection: 'row',
     flexWrap: 'wrap',

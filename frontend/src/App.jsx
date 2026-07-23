@@ -1,12 +1,11 @@
-import { Routes, Route, useNavigate } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 import Navbar from './components/navbar.jsx'
 import { Products } from './components/products.jsx'
-import { products as initialProducts } from './mocks/products.json'
-import { useState, useEffect, useContext, useMemo } from 'react'
+import { useState, useEffect, useMemo } from 'react'
+import axios from 'axios'
 import { Header } from './components/Header.jsx'
 import { Footer } from './components/Footer.jsx'
 import { useFilters } from './hooks/useFilters.js'
-import { UserContext } from './context/UserContext.js'
 import Login from './pages/Login.jsx'
 import Register from "./pages/Register.jsx"
 import ProductPage from './pages/ProductPage.jsx';
@@ -15,32 +14,40 @@ import UserPanel from './pages/UserPanel.jsx'
 import AdminPanel from './pages/AdminPanel.jsx'
 import Banner from './components/Banner.jsx'
 import OnlineUsers from './components/OnlineUsers.jsx'
+import GenreSidebar from './components/GenreSidebar.jsx'
 
 function App() {
-  const navigate = useNavigate()
-  const { user } = useContext(UserContext)
-  const [products] = useState(initialProducts)
+  const [products, setProducts] = useState([]);
   const { filterProducts } = useFilters()
-  const filteredProducts = filterProducts(products)
+
+  useEffect(() => {
+    const fetchMovies = async () => {
+      try {
+        const res = await axios.get('http://localhost:3001/movies');
+        setProducts(res.data);
+      } catch (e) {
+        console.error('Error fetching movies:', e);
+      }
+    };
+    fetchMovies();
+  }, []);
 
   const topRated = useMemo(() => {
     return [...products].sort((a, b) => b.rating - a.rating).slice(0, 10);
   }, [products]);
 
   const [expandedGenre, setExpandedGenre] = useState(null)
+  const [activeTab, setActiveTab] = useState("top10")
 
   const genres = useMemo(() => {
     const genreMap = {};
     products.forEach(p => {
-      const cat = p.category[0];
-      if (!genreMap[cat]) genreMap[cat] = [];
-      genreMap[cat].push(p);
+      const cat = p.category?.[0];
+      if (cat && !genreMap[cat]) genreMap[cat] = [];
+      if (cat) genreMap[cat].push(p);
     });
     return genreMap;
   }, [products]);
-
-  const genreOrder = ["Acción", "Aventura", "Animadas", "Bélicas", "Comedias", "Terror"];
-  const genreIcons = { "Acción": "💥", "Aventura": "🗺️", "Animadas": "🎬", "Bélicas": "🎖️", "Comedias": "😂", "Terror": "👻" };
 
   const [theme, setTheme] = useState("dark-theme");
 
@@ -72,57 +79,50 @@ function App() {
               <Banner />
               <Header />
 
-              <section className="top-rated">
-                <div className="section-header">
-                  <span className="icon">⭐</span>
-                  <h2 className="section-title">Top 10 Mejor Valoradas</h2>
-                </div>
-                <p className="section-subtitle">Las mejores calificaciones de nuestra comunidad</p>
-              </section>
-              <Products products={topRated} limit={10} />
+              <div className="catalog-tabs">
+                <button
+                  className={`tab-btn ${activeTab === "top10" ? "active" : ""}`}
+                  onClick={() => { setActiveTab("top10"); setExpandedGenre(null); }}
+                >
+                  <span className="tab-icon">⭐</span>
+                  Top 10
+                </button>
+                <button
+                  className={`tab-btn ${activeTab === "genres" ? "active" : ""}`}
+                  onClick={() => setActiveTab("genres")}
+                >
+                  <span className="tab-icon">🎬</span>
+                  Géneros
+                </button>
+              </div>
 
-              {!user ? (
-                <div className="ver-mas-container">
-                  <button className="ver-mas-btn" onClick={() => navigate('/login')}>
-                    Iniciá sesión para ver el catálogo completo
-                  </button>
-                </div>
-              ) : (
+              {activeTab === "top10" && (
                 <>
-                  <section className="top-rated" style={{ marginTop: '1rem' }}>
-                    <div className="section-header">
-                      <span className="icon">🎬</span>
-                      <h2 className="section-title">Catálogo por Género</h2>
-                    </div>
-                    <p className="section-subtitle">Seleccioná un género para explorar las películas</p>
-                  </section>
-
-                  <div className="genre-buttons">
-                    {genreOrder.map(genre => (
-                      <button
-                        key={genre}
-                        className={`genre-btn ${expandedGenre === genre ? 'active' : ''}`}
-                        onClick={() => setExpandedGenre(expandedGenre === genre ? null : genre)}
-                      >
-                        <span className="genre-icon">{genreIcons[genre]}</span>
-                        {genre}
-                        <span className="genre-count">({filteredGenres[genre]?.length || 0})</span>
-                      </button>
-                    ))}
-                  </div>
-
-                  {expandedGenre && filteredGenres[expandedGenre] && (
-                    filteredGenres[expandedGenre].length > 0 ? (
-                      <Products products={filteredGenres[expandedGenre]} />
-                    ) : (
-                      <p className="genre-prompt">No hay resultados para "{expandedGenre}" con los filtros actuales</p>
-                    )
-                  )}
-
-                  {!expandedGenre && (
-                    <p className="genre-prompt">Seleccioná un género arriba para ver las películas</p>
-                  )}
+                  <p className="section-subtitle" style={{ paddingLeft: 16 }}>Las mejores calificaciones de nuestra comunidad</p>
+                  <Products products={topRated} limit={10} />
                 </>
+              )}
+
+              {activeTab === "genres" && (
+                <div className="catalog-layout">
+                  <GenreSidebar
+                    selectedGenre={expandedGenre}
+                    onSelectGenre={setExpandedGenre}
+                    filteredGenres={filteredGenres}
+                  />
+                  <div className="catalog-content">
+                    {expandedGenre && filteredGenres[expandedGenre] && (
+                      filteredGenres[expandedGenre].length > 0 ? (
+                        <Products products={filteredGenres[expandedGenre]} />
+                      ) : (
+                        <p className="genre-prompt">No hay resultados para "{expandedGenre}" con los filtros actuales</p>
+                      )
+                    )}
+                    {!expandedGenre && (
+                      <p className="genre-prompt">Seleccioná un género en la barra lateral para ver las películas</p>
+                    )}
+                  </div>
+                </div>
               )}
 
               <Footer />
@@ -147,3 +147,4 @@ function App() {
 }
 
 export default App;
+

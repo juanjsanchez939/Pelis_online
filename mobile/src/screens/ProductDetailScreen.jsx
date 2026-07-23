@@ -4,13 +4,12 @@ import {
   StyleSheet, FlatList, Alert, ActivityIndicator,
 } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
-import { products as initialProducts } from '../assets/products.json';
 import { useFavs } from '../hooks/useFavs';
 import { SnackbarContext } from '../contexts/SnackbarContext';
 import { UserContext } from '../contexts/UserContext';
 import { useTheme } from '../contexts/ThemeContext';
 import { darkTheme, lightTheme } from '../theme';
-import { IMAGE_BASE_URL } from '../config';
+import { IMAGE_BASE_URL, API_BASE_URL } from '../config';
 import StarRating from '../components/StarRating';
 
 export default function ProductDetailScreen({ route, navigation }) {
@@ -21,15 +20,28 @@ export default function ProductDetailScreen({ route, navigation }) {
   const { toggleFav, isFav } = useFavs();
   const { showSnackbar } = useContext(SnackbarContext);
 
-  const movie = initialProducts.find((p) => p.id === id);
+  const [movie, setMovie] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const [newComment, setNewComment] = useState('');
   const [commentRating, setCommentRating] = useState(5);
   const [comments, setComments] = useState([]);
 
   useEffect(() => {
-    if (movie) setComments(movie.comments || []);
-  }, [movie]);
+    const fetchMovie = async () => {
+      try {
+        const res = await fetch(`${API_BASE_URL}/movies/${id}`);
+        const data = await res.json();
+        setMovie(data);
+        setComments(data.comments || []);
+      } catch (e) {
+        console.error('Error fetching movie:', e);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchMovie();
+  }, [id]);
 
   useFocusEffect(
     useCallback(() => {
@@ -43,6 +55,14 @@ export default function ProductDetailScreen({ route, navigation }) {
     return (
       <View style={[styles.centered, { backgroundColor: theme.background }]}>
         <Text style={{ color: theme.textSecondary }}>Inicia sesión para ver esta película</Text>
+      </View>
+    );
+  }
+
+  if (loading) {
+    return (
+      <View style={[styles.centered, { backgroundColor: theme.background }]}>
+        <ActivityIndicator size="large" color={theme.primary} />
       </View>
     );
   }
@@ -96,7 +116,7 @@ export default function ProductDetailScreen({ route, navigation }) {
           <Text style={[styles.meta, { color: theme.textSecondary }]}>
             Director: {movie.director}
           </Text>
-          <Text style={[styles.categoryTag, { color: theme.primary }]}>{movie.category[0]}</Text>
+          <Text style={[styles.categoryTag, { color: theme.primary }]}>{movie.category?.[0]}</Text>
 
           {movie.rating && (
             <View style={{ marginTop: 4 }}>
