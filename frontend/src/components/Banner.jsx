@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import './Banner.css';
+import { useTranslation } from 'react-i18next';
 
 const Banner = () => {
+  const { t } = useTranslation();
   const images = [
     '/portadas/portada1.png',
     '/portadas/portada2.png',
@@ -29,7 +31,15 @@ const Banner = () => {
     />
   ))}
 
-  <div className="banner-content" />
+  <div className="banner-content">
+    <div className="banner-logo-wrapper">
+      <div className="banner-reel">
+        <div className="banner-reel-ring" />
+      </div>
+      <h1>Clip<span>Now</span></h1>
+    </div>
+    <p>{t('site.slogan')}</p>
+  </div>
 </section>
 
   );

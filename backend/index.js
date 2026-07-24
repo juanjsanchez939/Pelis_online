@@ -51,7 +51,7 @@ async function start() {
   configureMiddlewares(router);
 
   app.get('/', (req, res) => {
-    res.json({ name: 'PelisOnline API', status: 'online', endpoints: ['/movies', '/login', '/register'] });
+    res.json({ name: 'ClipNow API', status: 'online', endpoints: ['/movies', '/login', '/register'] });
   });
 
   app.get('/reseed', async (req, res) => {

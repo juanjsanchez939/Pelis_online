@@ -59,7 +59,7 @@ export default function Login() {
     <div className="login-page">
       <form className="login-form" onSubmit={handleLogin}>
         <div className="logo">
-          Pelis<span>Online</span>
+          Clip<span>Now</span>
         </div>
 
         <h2>{t('login.title')}</h2>

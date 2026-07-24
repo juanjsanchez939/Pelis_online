@@ -1,4 +1,8 @@
 {
+  "site": {
+    "name": "ClipNow",
+    "slogan": "Find your next obsession"
+  },
   "navbar": {
     "home": "Home",
     "moreInfo": "More Info",

@@ -78,7 +78,7 @@ export default function Register() {
     <div className="login-page">
       <form className="login-form" onSubmit={handleSubmit}>
         <div className="logo">
-          Pelis<span>Online</span>
+          Clip<span>Now</span>
         </div>
 
         <h2>{t('register.title')}</h2>

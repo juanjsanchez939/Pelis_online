@@ -109,7 +109,7 @@ const Navbar = ({ theme, toggleTheme }) => {
         <Link to="/" className="logo">
           <FilmReelIcon />
           <span className="logo-text">
-            Pelis<span className="logo-accent">Online</span>
+            Clip<span className="logo-accent">Now</span>
           </span>
         </Link>
       </div>
