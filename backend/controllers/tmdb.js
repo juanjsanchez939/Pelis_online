@@ -10,12 +10,7 @@ export function tmdbRoutes(app) {
                 TmdbService.getUpcoming(),
                 TmdbService.getTopRated(),
             ]);
-            const seen = new Set();
-            const all = [...popular, ...nowPlaying, ...upcoming, ...topRated].filter(m => {
-                if (seen.has(m.id)) return false;
-                seen.add(m.id);
-                return true;
-            });
+            const all = [...popular, ...nowPlaying, ...upcoming, ...topRated];
             res.json(all);
         } catch (e) {
             res.status(500).json({ error: e.message });
@@ -30,12 +25,7 @@ export function tmdbRoutes(app) {
                 TmdbService.getOnTheAir(),
                 TmdbService.getTopRatedTv(),
             ]);
-            const seen = new Set();
-            const all = [...popular, ...airing, ...onAir, ...topRated].filter(t => {
-                if (seen.has(t.id)) return false;
-                seen.add(t.id);
-                return true;
-            });
+            const all = [...popular, ...airing, ...onAir, ...topRated];
             res.json(all);
         } catch (e) {
             res.status(500).json({ error: e.message });
