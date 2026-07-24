@@ -3,6 +3,7 @@ import config from './config.js';
 import mongoose from 'mongoose';
 import configureDependencies from './configure_dependencies.js';
 import configureMiddlewares from './middlewares/configure_middlewares.js';
+import { corsModdleware } from './middlewares/cors_middleware.js';
 import { seedAllMovies, seedAdmin } from './seed_movies.js';
 import { tmdbRoutes } from './controllers/tmdb.js';
 
@@ -38,6 +39,9 @@ async function start() {
 
   const app = express();
   const router = express.Router();
+
+  app.use(express.json());
+  app.use(corsModdleware);
 
   tmdbRoutes(app);
 
