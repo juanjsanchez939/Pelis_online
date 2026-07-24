@@ -66,6 +66,7 @@ export default function HomeScreen({ navigation }) {
 
   const genres = useMemo(() => {
     const map = {};
+    if (!Array.isArray(products)) return map;
     products.forEach((p) => {
       const cat = p.category?.[0];
       if (cat && !map[cat]) map[cat] = [];
@@ -74,7 +75,7 @@ export default function HomeScreen({ navigation }) {
     return map;
   }, [products]);
 
-  const allFilteredMovies = useMemo(() => filterProducts(products), [products, filterProducts]);
+  const allFilteredMovies = useMemo(() => Array.isArray(products) ? filterProducts(products) : [], [products, filterProducts]);
 
   const moviesToShow = useMemo(() => {
     if (selectedGenre === 'all') return allFilteredMovies;
