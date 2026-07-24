@@ -125,3 +125,40 @@
     transform: translateY(0);
   }
 }
+
+.input-with-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-with-icon input {
+  flex: 1;
+  padding-right: 36px;
+}
+
+.input-icon {
+  position: absolute;
+  right: 10px;
+  top: 36%;
+  transform: translateY(-50%);
+  font-size: 1rem;
+}
+
+.input-icon.available {
+  color: #00c853;
+  filter: drop-shadow(0 0 4px rgba(0, 200, 83, 0.5));
+}
+
+.input-icon.taken {
+  color: #e50914;
+}
+
+.input-icon.checking {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: translateY(-50%) rotate(0deg); }
+  to { transform: translateY(-50%) rotate(360deg); }
+}
