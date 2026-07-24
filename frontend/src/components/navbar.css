@@ -396,10 +396,11 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(12, 12, 14, 0.98);
+    background: #0c0c0e;
     backdrop-filter: blur(20px);
     z-index: 250;
     animation: slideDown 0.3s ease;
+    overflow-y: auto;
   }
 
   .mobile-menu-inner {

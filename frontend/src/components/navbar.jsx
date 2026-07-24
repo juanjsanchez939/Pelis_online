@@ -48,6 +48,12 @@ const Navbar = ({ theme, toggleTheme }) => {
   const dropdownRef = useRef(null);
 
   useEffect(() => {
+    const handler = () => setMobileMenu(false);
+    window.addEventListener("scroll", handler);
+    return () => window.removeEventListener("scroll", handler);
+  }, []);
+
+  useEffect(() => {
     const fetchMovies = async () => {
       try {
         const res = await axios.get(`${API_BASE_URL}/movies`);
