@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import configureDependencies from './configure_dependencies.js';
 import configureMiddlewares from './middlewares/configure_middlewares.js';
 import { seedAllMovies, seedAdmin } from './seed_movies.js';
+import { tmdbRoutes } from './controllers/tmdb.js';
 
 async function start() {
   if (!config.jwtKey) {
@@ -41,6 +42,8 @@ async function start() {
   app.use(router);
 
   configureMiddlewares(router);
+
+  tmdbRoutes(app);
 
   app.get('/', (req, res) => {
     res.json({ name: 'PelisOnline API', status: 'online', endpoints: ['/movies', '/login', '/register'] });

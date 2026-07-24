@@ -17,6 +17,7 @@ import AdminPanel from './pages/AdminPanel.jsx'
 import Banner from './components/Banner.jsx'
 import OnlineUsers from './components/OnlineUsers.jsx'
 import { GENRE_ORDER, GENRE_ICONS } from './utils/shared.js'
+import TmdbSection from './components/TmdbSection.jsx'
 
 function App() {
   const { user } = useContext(UserContext)
@@ -108,6 +109,13 @@ function App() {
                   <span className="tab-icon">🆕</span>
                   Estreno 2026
                 </button>
+                <button
+                  className={`tab-btn ${activeTab === "tmdb" ? "active" : ""}`}
+                  onClick={() => setActiveTab("tmdb")}
+                >
+                  <span className="tab-icon">🌎</span>
+                  Descubrir
+                </button>
               </div>
 
               {activeTab === "top10" && (
@@ -164,6 +172,10 @@ function App() {
                 <p className="genre-prompt" style={{ padding: '40px', textAlign: 'center' }}>
                   <a href="/login" style={{ color: '#e50914' }}>Iniciá sesión</a> para ver los estrenos de 2026
                 </p>
+              )}
+
+              {activeTab === "tmdb" && (
+                <TmdbSection />
               )}
 
               <Footer />
