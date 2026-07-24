@@ -154,10 +154,14 @@ const Navbar = ({ theme, toggleTheme }) => {
             </div>
           )}
         </div>
-        <button className={`hamburger ${mobileMenu ? "open" : ""}`} onClick={() => setMobileMenu(!mobileMenu)}>
-          <span className="hamburger-line" />
-          <span className="hamburger-line" />
-          <span className="hamburger-line" />
+        <button
+          className="hamburger"
+          onClick={() => setMobileMenu(!mobileMenu)}
+          style={{ display: "none", flexDirection: "column", gap: 5, background: "none", border: "none", cursor: "pointer", padding: 8, zIndex: 300 }}
+        >
+          <span style={{ display: "block", width: 22, height: 3, background: "#e50914", borderRadius: 3, transition: "all 0.3s" }} />
+          <span style={{ display: "block", width: 22, height: 3, background: "#e50914", borderRadius: 3, transition: "all 0.3s" }} />
+          <span style={{ display: "block", width: 22, height: 3, background: "#e50914", borderRadius: 3, transition: "all 0.3s" }} />
         </button>
       </div>
 
