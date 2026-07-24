@@ -3,7 +3,7 @@ import config from './config.js';
 import mongoose from 'mongoose';
 import configureDependencies from './configure_dependencies.js';
 import configureMiddlewares from './middlewares/configure_middlewares.js';
-import { seedMovies, seedAdmin } from './seed_movies.js';
+import { seedAllMovies, seedAdmin } from './seed_movies.js';
 
 async function start() {
   if (!config.jwtKey) {
@@ -31,7 +31,7 @@ async function start() {
   const count = await MovieModel.countDocuments();
   if (count === 0) {
     console.log('📥 Base de datos vacía. Sembrando películas...');
-    await seedMovies();
+      await seedAllMovies();
   }
   await seedAdmin();
 
@@ -50,7 +50,7 @@ async function start() {
     const MovieModel = mongoose.model('movies');
     await MovieModel.deleteMany({});
     res.json({ status: 'Resembrando...' });
-    await seedMovies();
+      await seedAllMovies();
     console.log('✅ Resiembra completada');
   });
 
