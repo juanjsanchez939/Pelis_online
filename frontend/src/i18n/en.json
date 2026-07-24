@@ -24,7 +24,21 @@
     "movies": "movies",
     "series": "TV series",
     "loginPrompt": "Log in",
-    "toSeeAll": "to see all {{count}} {{type}}"
+    "toSeeAll": "to see all {{count}} {{type}}",
+    "categories": {
+      "movies": {
+        "popular": "Popular",
+        "now-playing": "Now Playing",
+        "upcoming": "Upcoming",
+        "top-rated": "Top Rated"
+      },
+      "tv": {
+        "popular": "Popular",
+        "airing-today": "Airing Today",
+        "on-the-air": "On TV",
+        "top-rated": "Top Rated"
+      }
+    }
   },
   "header": {
     "catalog": "Movie Catalog"

@@ -1,29 +1,31 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useMemo } from "react";
 import axios from "axios";
 import { Products } from "./products.jsx";
 import { API_BASE_URL } from "../utils/shared.js";
 import { UserContext } from "../context/UserContext.js";
 import { useTranslation } from "react-i18next";
 
-const MOVIE_CATS = [
-    { key: "popular", label: "Popular", icon: "🔥" },
-    { key: "now-playing", label: "Now Playing", icon: "🎟️" },
-    { key: "upcoming", label: "Upcoming", icon: "📅" },
-    { key: "top-rated", label: "Top Rated", icon: "⭐" },
-];
+const ICONS = {
+    popular: "🔥", "now-playing": "🎟️", upcoming: "📅", "top-rated": "⭐",
+    "airing-today": "🕐", "on-the-air": "📡",
+};
 
-const TV_CATS = [
-    { key: "popular", label: "Popular", icon: "📺" },
-    { key: "airing-today", label: "Airing Today", icon: "🕐" },
-    { key: "on-the-air", label: "On TV", icon: "📡" },
-    { key: "top-rated", label: "Top Rated", icon: "⭐" },
-];
+const MOVIE_KEYS = ["popular", "now-playing", "upcoming", "top-rated"];
+const TV_KEYS = ["popular", "airing-today", "on-the-air", "top-rated"];
 
 export default function TmdbSection({ mode = "movies" }) {
     const { t } = useTranslation();
     const { user } = useContext(UserContext);
     const endpoint = mode === "tv" ? "/tv/all" : "/movies/all";
-    const categories = mode === "tv" ? TV_CATS : MOVIE_CATS;
+    const keys = mode === "tv" ? TV_KEYS : MOVIE_KEYS;
+    const catKey = mode === "tv" ? "tv" : "movies";
+
+    const categories = useMemo(() => keys.map(key => ({
+        key,
+        label: t(`tmdb.categories.${catKey}.${key}`),
+        icon: ICONS[key] || "🎬",
+    })), [t, catKey, keys]);
+
     const [items, setItems] = useState([]);
     const [cat, setCat] = useState("");
 
@@ -36,7 +38,7 @@ export default function TmdbSection({ mode = "movies" }) {
                 }
             })
             .catch(() => setItems([]));
-    }, [mode]);
+    }, [mode, cat]);
 
     const filtered = (cat ? items.filter(m => m.tag === cat) : items);
     const display = user ? filtered : filtered.slice(0, 5);

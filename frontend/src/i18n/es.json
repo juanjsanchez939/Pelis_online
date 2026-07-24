@@ -24,7 +24,21 @@
     "movies": "películas",
     "series": "series",
     "loginPrompt": "Inicia sesión",
-    "toSeeAll": "para ver las {{count}} {{type}}"
+    "toSeeAll": "para ver las {{count}} {{type}}",
+    "categories": {
+      "movies": {
+        "popular": "Populares",
+        "now-playing": "En Cartelera",
+        "upcoming": "Próximamente",
+        "top-rated": "Mejor Puntuadas"
+      },
+      "tv": {
+        "popular": "Populares",
+        "airing-today": "Se Emiten Hoy",
+        "on-the-air": "En Televisión",
+        "top-rated": "Mejor Valoradas"
+      }
+    }
   },
   "header": {
     "catalog": "Catálogo de Películas"
