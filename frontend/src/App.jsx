@@ -94,7 +94,12 @@ function App() {
                     <p className="cinema-subtitle">Los lanzamientos más esperados del año</p>
                     <div className="cinema-strip" />
                   </div>
-                  <Products products={releases2026} />
+                  <Products products={user ? releases2026 : releases2026.slice(0, 5)} limit={user ? undefined : 5} />
+                  {!user && (
+                    <p style={{ textAlign: 'center', padding: '20px', color: '#aaa' }}>
+                      <a href="/login" style={{ color: '#e50914' }}>Inicia sesión</a> para ver los {releases2026.length} estrenos de 2026
+                    </p>
+                  )}
                 </>
               )}
 

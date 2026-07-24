@@ -94,34 +94,16 @@ const Navbar = ({ theme, toggleTheme }) => {
 
   return (
     <header className="navbar">
-      <Link to="/" className="logo">
-        <FilmReelIcon />
-        <span className="logo-text">
-          Pelis<span className="logo-accent">Online</span>
-        </span>
-      </Link>
+      <div className="navbar-left">
+        <Link to="/" className="logo">
+          <FilmReelIcon />
+          <span className="logo-text">
+            Pelis<span className="logo-accent">Online</span>
+          </span>
+        </Link>
+      </div>
 
-      <nav className="nav-links">
-        <Link to="/">Inicio</Link>
-        <Link to="/ayuda">Más Info</Link>
-        {user && <Link to="/perfil">Mi Perfil</Link>}
-        {user?.roles?.includes("admin") && <Link to="/admin">Admin</Link>}
-      </nav>
-
-      <div className="actions">
-        {user ? (
-          <>
-            <span className="user-welcome">👤 {user.username}</span>
-            <button className="logout-nav-btn" onClick={handleLogout}>
-              CERRAR SESIÓN
-            </button>
-          </>
-        ) : (
-          <Link to="/login">
-            <button className="login-nav-btn">INICIAR SESIÓN</button>
-          </Link>
-        )}
-
+      <div className="navbar-center">
         <div className="search-wrapper" ref={dropdownRef}>
           <input
             ref={searchRef}
@@ -155,6 +137,28 @@ const Navbar = ({ theme, toggleTheme }) => {
             </div>
           )}
         </div>
+      </div>
+
+      <div className="navbar-right">
+        <nav className="nav-links">
+          <Link to="/">Inicio</Link>
+          <Link to="/ayuda">Más Info</Link>
+          {user && <Link to="/perfil">Mi Perfil</Link>}
+          {user?.roles?.includes("admin") && <Link to="/admin">Admin</Link>}
+        </nav>
+
+        {user ? (
+          <>
+            <span className="user-welcome">👤 {user.username}</span>
+            <button className="logout-nav-btn" onClick={handleLogout}>
+              CERRAR SESIÓN
+            </button>
+          </>
+        ) : (
+          <Link to="/login">
+            <button className="login-nav-btn">INICIAR SESIÓN</button>
+          </Link>
+        )}
 
         <button className="theme-toggle-btn" onClick={toggleTheme} title="Cambiar tema">
           {theme === "dark-theme" ? <LightIcon /> : <DarkIcon />}
