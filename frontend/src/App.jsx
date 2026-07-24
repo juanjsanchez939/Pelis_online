@@ -1,12 +1,13 @@
 import { Routes, Route } from 'react-router-dom'
 import Navbar from './components/navbar.jsx'
 import { Products } from './components/products.jsx'
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useContext } from 'react'
 import axios from 'axios'
 import { Header } from './components/Header.jsx'
 import { Footer } from './components/Footer.jsx'
 import { useFilters } from './hooks/useFilters.js'
 import { API_BASE_URL } from './utils/shared.js'
+import { UserContext } from './context/UserContext.js'
 import Login from './pages/Login.jsx'
 import Register from "./pages/Register.jsx"
 import ProductPage from './pages/ProductPage.jsx';
@@ -18,6 +19,7 @@ import OnlineUsers from './components/OnlineUsers.jsx'
 import { GENRE_ORDER, GENRE_ICONS } from './utils/shared.js'
 
 function App() {
+  const { user } = useContext(UserContext)
   const [products, setProducts] = useState([]);
   const { filterProducts } = useFilters()
 
@@ -35,6 +37,10 @@ function App() {
 
   const topRated = useMemo(() => {
     return [...products].sort((a, b) => b.rating - a.rating).slice(0, 10);
+  }, [products]);
+
+  const releases2026 = useMemo(() => {
+    return products.filter(p => p.year === 2026);
   }, [products]);
 
   const [expandedGenre, setExpandedGenre] = useState(null)
@@ -95,6 +101,13 @@ function App() {
                   <span className="tab-icon">🎬</span>
                   Géneros
                 </button>
+                <button
+                  className={`tab-btn ${activeTab === "estreno2026" ? "active" : ""}`}
+                  onClick={() => setActiveTab("estreno2026")}
+                >
+                  <span className="tab-icon">🆕</span>
+                  Estreno 2026
+                </button>
               </div>
 
               {activeTab === "top10" && (
@@ -104,7 +117,7 @@ function App() {
                 </>
               )}
 
-              {activeTab === "genres" && (
+              {activeTab === "genres" && user && (
                 <>
                   <div className="genre-vertical">
                     {GENRE_ORDER.map(genre => (
@@ -132,6 +145,25 @@ function App() {
                     )}
                   </div>
                 </>
+              )}
+
+              {activeTab === "genres" && !user && (
+                <p className="genre-prompt" style={{ padding: '40px', textAlign: 'center' }}>
+                  <a href="/login" style={{ color: '#e50914' }}>Iniciá sesión</a> para ver el catálogo por género
+                </p>
+              )}
+
+              {activeTab === "estreno2026" && user && (
+                <>
+                  <p className="section-subtitle" style={{ paddingLeft: 16 }}>Los lanzamientos más esperados de 2026</p>
+                  <Products products={releases2026} />
+                </>
+              )}
+
+              {activeTab === "estreno2026" && !user && (
+                <p className="genre-prompt" style={{ padding: '40px', textAlign: 'center' }}>
+                  <a href="/login" style={{ color: '#e50914' }}>Iniciá sesión</a> para ver los estrenos de 2026
+                </p>
               )}
 
               <Footer />
