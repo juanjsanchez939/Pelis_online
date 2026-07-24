@@ -4,6 +4,7 @@ import { Products } from "./products.jsx";
 import { API_BASE_URL } from "../utils/shared.js";
 import { UserContext } from "../context/UserContext.js";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 
 const ICONS = {
     popular: "🔥", "now-playing": "🎟️", upcoming: "📅", "top-rated": "⭐",
@@ -62,7 +63,7 @@ export default function TmdbSection({ mode = "movies" }) {
                 <Products products={display} limit={user ? undefined : 5} />
                 {!user && (
                     <p style={{ textAlign: 'center', padding: '20px', color: '#aaa' }}>
-                        <a href="/login" style={{ color: '#e50914' }}>{t('tmdb.loginPrompt')}</a> {t('tmdb.toSeeAll', { count: filtered.length, type: mode === "tv" ? t('tmdb.series') : t('tmdb.movies') })}
+                        <Link to="/login" style={{ color: '#e50914' }}>{t('tmdb.loginPrompt')}</Link> {t('tmdb.toSeeAll', { count: filtered.length, type: mode === "tv" ? t('tmdb.series') : t('tmdb.movies') })}
                     </p>
                 )}
             </div>

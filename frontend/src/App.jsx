@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Link } from 'react-router-dom'
 import Navbar from './components/navbar.jsx'
 import { Products } from './components/products.jsx'
 import { useState, useEffect, useMemo, useContext } from 'react'
@@ -100,7 +100,7 @@ function App() {
                   <Products products={user ? releases2026 : releases2026.slice(0, 5)} limit={user ? undefined : 5} />
                   {!user && (
                     <p style={{ textAlign: 'center', padding: '20px', color: '#aaa' }}>
-                      <a href="/login" style={{ color: '#e50914' }}>{t('estreno.loginPrompt')}</a> {t('estreno.toSee', { count: releases2026.length })}
+                      <Link to="/login" style={{ color: '#e50914' }}>{t('estreno.loginPrompt')}</Link> {t('estreno.toSee', { count: releases2026.length })}
                     </p>
                   )}
                 </>
