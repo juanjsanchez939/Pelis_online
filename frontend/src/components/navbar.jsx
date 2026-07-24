@@ -42,16 +42,9 @@ const Navbar = ({ theme, toggleTheme }) => {
   };
   const [searchText, setSearchText] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
-  const [mobileMenu, setMobileMenu] = useState(false);
   const [allProducts, setAllProducts] = useState([]);
   const searchRef = useRef(null);
   const dropdownRef = useRef(null);
-
-  useEffect(() => {
-    const handler = () => setMobileMenu(false);
-    window.addEventListener("scroll", handler, { passive: true });
-    return () => window.removeEventListener("scroll", handler);
-  }, []);
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -134,11 +127,7 @@ const Navbar = ({ theme, toggleTheme }) => {
           {showDropdown && results.length > 0 && (
             <div className="search-dropdown">
               {results.map(movie => (
-                <div
-                  key={movie.id}
-                  className="search-result-item"
-                  onClick={() => handleResultClick(movie.id)}
-                >
+                <div key={movie.id} className="search-result-item" onClick={() => handleResultClick(movie.id)}>
                   <img src={getImageUrl(movie.thumbnail)} alt={movie.title} />
                   <div className="search-result-info">
                     <span className="search-result-title">{movie.title}</span>
@@ -154,19 +143,10 @@ const Navbar = ({ theme, toggleTheme }) => {
             </div>
           )}
         </div>
-        <button
-          className="hamburger"
-          onClick={() => setMobileMenu(!mobileMenu)}
-          style={{ display: "none", flexDirection: "column", gap: 5, background: "none", border: "none", cursor: "pointer", padding: 8, zIndex: 300 }}
-        >
-          <span style={{ display: "block", width: 22, height: 3, background: "#e50914", borderRadius: 3, transition: "all 0.3s" }} />
-          <span style={{ display: "block", width: 22, height: 3, background: "#e50914", borderRadius: 3, transition: "all 0.3s" }} />
-          <span style={{ display: "block", width: 22, height: 3, background: "#e50914", borderRadius: 3, transition: "all 0.3s" }} />
-        </button>
       </div>
 
-      <div className="navbar-right desktop-only">
-        <nav className="nav-links">
+      <div className="navbar-right">
+        <nav className="nav-links desktop-only">
           {!isHome && <Link to="/">{t('navbar.home')}</Link>}
           <Link to="/ayuda">{t('navbar.moreInfo')}</Link>
           {user && <Link to="/perfil">{t('navbar.myProfile')}</Link>}
@@ -175,10 +155,8 @@ const Navbar = ({ theme, toggleTheme }) => {
 
         {user ? (
           <>
-            <span className="user-welcome">👤 {user.username}</span>
-            <button className="logout-nav-btn" onClick={handleLogout}>
-              {t('navbar.logout')}
-            </button>
+            <span className="user-welcome desktop-only">👤 {user.username}</span>
+            <button className="logout-nav-btn" onClick={handleLogout}>{t('navbar.logout')}</button>
           </>
         ) : (
           <Link to="/login">
@@ -186,36 +164,10 @@ const Navbar = ({ theme, toggleTheme }) => {
           </Link>
         )}
 
-        <button className="lang-toggle-btn" onClick={toggleLang} title={i18n.language === 'es' ? 'English' : 'Español'}>
-          {i18n.language === 'es' ? '🇺🇸' : '🇪🇸'}
-        </button>
-
-        <button className="theme-toggle-btn" onClick={toggleTheme} title="Cambiar tema">
+        <button className="lang-toggle-btn" onClick={toggleLang}>{i18n.language === 'es' ? '🇺🇸' : '🇪🇸'}</button>
+        <button className="theme-toggle-btn" onClick={toggleTheme}>
           {theme === "dark-theme" ? <LightIcon /> : <DarkIcon />}
         </button>
-      </div>
-
-      <div className={`mobile-menu ${mobileMenu ? "open" : ""}`}>
-        <div className="mobile-menu-inner">
-          <button className="mobile-close" onClick={() => setMobileMenu(false)}>✕</button>
-          {!isHome && <Link to="/" onClick={() => setMobileMenu(false)}>{t('navbar.home')}</Link>}
-          <Link to="/ayuda" onClick={() => setMobileMenu(false)}>{t('navbar.moreInfo')}</Link>
-          {user && <Link to="/perfil" onClick={() => setMobileMenu(false)}>{t('navbar.myProfile')}</Link>}
-          {user?.roles?.includes("admin") && <Link to="/admin" onClick={() => setMobileMenu(false)}>{t('navbar.admin')}</Link>}
-          <div className="mobile-menu-actions">
-            {user ? (
-              <button className="logout-nav-btn" onClick={() => { handleLogout(); setMobileMenu(false); }}>{t('navbar.logout')}</button>
-            ) : (
-              <Link to="/login" onClick={() => setMobileMenu(false)}>
-                <button className="login-nav-btn">{t('navbar.login')}</button>
-              </Link>
-            )}
-            <button className="lang-toggle-btn" onClick={toggleLang}>{i18n.language === 'es' ? '🇺🇸' : '🇪🇸'}</button>
-            <button className="theme-toggle-btn" onClick={toggleTheme}>
-              {theme === "dark-theme" ? <LightIcon /> : <DarkIcon />}
-            </button>
-          </div>
-        </div>
       </div>
     </header>
   );
