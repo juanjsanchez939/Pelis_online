@@ -3,8 +3,10 @@ import "./Login.css";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 import { API_BASE_URL } from "../utils/shared.js";
+import { useTranslation } from "react-i18next";
 
 export default function Login() {
+  const { t } = useTranslation();
   const { login } = useContext(UserContext);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -17,7 +19,7 @@ export default function Login() {
     e.preventDefault();
 
     if (!username || !password) {
-      alert("Por favor completa todos los campos");
+      alert(t('login.fillFields'));
       return;
     }
 
@@ -48,7 +50,7 @@ export default function Login() {
       }
 
     } catch (err) {
-      alert("Error conectando al servidor");
+      alert(t('login.error'));
       console.error(err);
     }
   };
@@ -60,13 +62,13 @@ export default function Login() {
           Pelis<span>Online</span>
         </div>
 
-        <h2>Iniciar Sesión</h2>
+        <h2>{t('login.title')}</h2>
 
         {success && (
           <div style={{ color: '#00aa00', marginBottom: '1rem' }}>{success}</div>
         )}
 
-        <label htmlFor="username">Usuario:</label>
+        <label htmlFor="username">{t('login.username')}:</label>
         <input
           id="username"
           type="text"
@@ -75,7 +77,7 @@ export default function Login() {
           required
         />
 
-        <label htmlFor="password">Contraseña:</label>
+        <label htmlFor="password">{t('login.password')}:</label>
         <input
           id="password"
           type="password"
@@ -84,12 +86,12 @@ export default function Login() {
           required
         />
 
-        <button type="submit">Iniciar Sesión</button>
+        <button type="submit">{t('login.submit')}</button>
 
         <p className="register-text">
-          ¿No tienes cuenta?{" "}
+          {t('login.noAccount')}{" "}
           <Link to="/register" className="register-link">
-            Crear cuenta
+            {t('login.createAccount')}
           </Link>
         </p>
       </form>

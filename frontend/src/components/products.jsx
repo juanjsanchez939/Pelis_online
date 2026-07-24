@@ -6,19 +6,21 @@ import { useContext } from "react";
 import { SnackbarContext } from "../context/snackbarContext.js";
 import { UserContext } from "../context/UserContext.js";
 import { getImageUrl } from "../utils/shared.js";
+import { useTranslation } from "react-i18next";
 
 export function Products({ products, limit }) {
   const displayed = limit ? products.slice(0, limit) : products;
   const { toggleFav, isFav } = useFavs();
   const { showSnackbar } = useContext(SnackbarContext);
   const { user } = useContext(UserContext);
+  const { t } = useTranslation();
 
   const handleFavAction = (movie) => {
     toggleFav(movie);
     if (isFav(movie.id)) {
-      showSnackbar(`Quitaste "${movie.title}" de favoritos`, "error");
+      showSnackbar(t('favorites.removed', { title: movie.title }), "error");
     } else {
-      showSnackbar(`Agregaste "${movie.title}" a favoritos`, "success");
+      showSnackbar(t('favorites.added', { title: movie.title }), "success");
     }
   };
 
@@ -48,7 +50,7 @@ export function Products({ products, limit }) {
                 onClick={() => handleFavAction(movie)}
               >
                 {fav ? <HeartFilledIcon /> : <HeartIcon />}
-                {fav ? " Favorito" : " Agregar a favoritos"}
+                {fav ? " " + t('favorites.favorite') : " " + t('favorites.add')}
               </button>
               )}
             </div>

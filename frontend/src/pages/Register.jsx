@@ -3,8 +3,10 @@ import "./Register.css";
 import { Link } from "react-router-dom";
 import axios from 'axios'
 import { API_BASE_URL } from "../utils/shared.js";
+import { useTranslation } from "react-i18next";
 
 export default function Register() {
+  const { t } = useTranslation();
   const [ username, setUsername] = useState("")
   const [ email, setEmail] = useState("")
   const [ password, setPassword] = useState("")
@@ -38,23 +40,23 @@ export default function Register() {
     setSuccess("")
 
     if (password.length < 8) {
-      setError("La contraseña debe tener al menos 8 caracteres")
+      setError(t('register.passwordShort'))
       return
     }
 
     if (password !== confirmPassword) {
-      setError("Las contraseñas no coinciden")
+      setError(t('register.passwordMismatch'))
       return
     }
 
     if (usernameAvailable === false) {
-      setError("El nombre de usuario no está disponible")
+      setError(t('register.userTaken'))
       return
     }
 
     axios.post(`${API_BASE_URL}/register`, {username, email, password})
       .then(() => {
-        setSuccess("Usuario registrado correctamente. Redirigiendo...")
+        setSuccess(t('register.success'))
         setUsername("")
         setEmail("")
         setPassword("")
@@ -79,12 +81,12 @@ export default function Register() {
           Pelis<span>Online</span>
         </div>
 
-        <h2>Crear Cuenta</h2>
+        <h2>{t('register.title')}</h2>
 
         {error && <div style={{color: '#e50914', marginBottom: '1rem'}}>{error}</div>}
         {success && <div style={{color: '#00aa00', marginBottom: '1rem'}}>{success}</div>}
 
-        <label htmlFor="username">Usuario:</label>
+        <label htmlFor="username">{t('register.username')}:</label>
         <div className="input-with-icon">
           <input
             type="text"
@@ -99,7 +101,7 @@ export default function Register() {
           </span>
         </div>
 
-        <label htmlFor="email">Correo electrónico:</label>
+        <label htmlFor="email">{t('register.email')}:</label>
         <input
           type="email"
           id="email"
@@ -109,7 +111,7 @@ export default function Register() {
           onChange={(e) => setEmail(e.target.value)}
         />
 
-        <label htmlFor="password">Contraseña (mínimo 8 caracteres):</label>
+        <label htmlFor="password">{t('register.password')}:</label>
         <div className="input-with-icon">
           <input
             type="password"
@@ -124,7 +126,7 @@ export default function Register() {
           </span>
         </div>
 
-        <label htmlFor="confirm-password">Confirmar contraseña:</label>
+        <label htmlFor="confirm-password">{t('register.confirm')}:</label>
         <div className="input-with-icon">
           <input
             type="password"
@@ -139,12 +141,12 @@ export default function Register() {
           </span>
         </div>
 
-        <button type="submit">Registrarse</button>
+        <button type="submit">{t('register.submit')}</button>
 
         <p className="register-text">
-          ¿Ya tienes una cuenta?{" "}
+          {t('register.haveAccount')}{" "}
           <Link to="/login" className="register-link">
-            Iniciar sesión
+            {t('register.login')}
           </Link>
         </p>
       </form>

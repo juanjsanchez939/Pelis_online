@@ -1,0 +1,105 @@
+{
+  "navbar": {
+    "home": "Home",
+    "moreInfo": "More Info",
+    "myProfile": "My Profile",
+    "admin": "Admin",
+    "login": "LOGIN",
+    "logout": "LOGOUT",
+    "search": "Search movies...",
+    "noResults": "No movies found"
+  },
+  "tabs": {
+    "estreno2026": "2026 Releases",
+    "peliculas": "Movies",
+    "series": "TV Series"
+  },
+  "estreno": {
+    "title": "2026 RELEASES",
+    "subtitle": "The most anticipated releases of the year",
+    "loginPrompt": "Log in",
+    "toSee": "to see all {{count}} 2026 releases"
+  },
+  "tmdb": {
+    "movies": "movies",
+    "series": "TV series",
+    "loginPrompt": "Log in",
+    "toSeeAll": "to see all {{count}} {{type}}"
+  },
+  "header": {
+    "catalog": "Movie Catalog"
+  },
+  "banner": {
+    "viewCatalog": "View Catalog"
+  },
+  "genre": {
+    "prompt": "Select a genre above to explore movies",
+    "noResults": "No results for \"{{genre}}\" with current filters"
+  },
+  "favorites": {
+    "added": "\"{{title}}\" added to favorites",
+    "removed": "\"{{title}}\" removed from favorites",
+    "add": "Add to favorites",
+    "favorite": "Favorite"
+  },
+  "product": {
+    "login": "Log in to view this movie",
+    "notFound": "Movie not found",
+    "director": "Director",
+    "cast": "Cast",
+    "synopsis": "Synopsis",
+    "details": "Details",
+    "year": "Year",
+    "duration": "Duration",
+    "genre": "Genre",
+    "trailer": "Trailer",
+    "comments": "Comments",
+    "yourRating": "Your rating",
+    "leaveComment": "Leave your comment about this movie...",
+    "publish": "Publish comment",
+    "firstComment": "Be the first to comment",
+    "commentPublished": "Comment published"
+  },
+  "login": {
+    "title": "Log In",
+    "username": "Username",
+    "password": "Password",
+    "submit": "Log In",
+    "noAccount": "Don't have an account?",
+    "createAccount": "Create account",
+    "success": "Login successful",
+    "fillFields": "Please fill in all fields",
+    "error": "Error connecting to server"
+  },
+  "register": {
+    "title": "Create Account",
+    "username": "Username",
+    "email": "Email",
+    "password": "Password (min 8 characters)",
+    "confirm": "Confirm password",
+    "submit": "Register",
+    "haveAccount": "Already have an account?",
+    "login": "Log in",
+    "success": "User registered successfully. Redirecting...",
+    "passwordMismatch": "Passwords do not match",
+    "passwordShort": "Password must be at least 8 characters",
+    "userTaken": "Username is not available"
+  },
+  "user": {
+    "myProfile": "My Profile",
+    "registerData": "Registration Data",
+    "user": "User",
+    "fullName": "Full Name",
+    "email": "Email",
+    "roles": "Roles",
+    "logout": "Log Out",
+    "favorites": "Favorite Movies",
+    "noFavs": "You have no favorites yet.",
+    "explore": "Explore the catalog",
+    "clearFavs": "Clear favorites"
+  },
+  "admin": {
+    "panel": "Admin Panel",
+    "restricted": "Access denied. Admin permissions required."
+  }
+}

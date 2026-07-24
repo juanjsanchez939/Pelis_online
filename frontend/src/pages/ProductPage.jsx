@@ -7,6 +7,7 @@ import { UserContext } from "../context/UserContext.js";
 import "./ProductPage.css";
 import { HeartIcon, HeartFilledIcon } from "../components/icons.jsx";
 import { getImageUrl, API_BASE_URL } from "../utils/shared.js";
+import { useTranslation } from "react-i18next";
 
 function Stars({ rating }) {
   const full = Math.floor(rating);
@@ -26,6 +27,7 @@ export default function ProductPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
+  const { t } = useTranslation();
   const [movie, setMovie] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -65,9 +67,9 @@ export default function ProductPage() {
     }
   }, [movie]);
 
-  if (!user) return <p className="auth-message">Inicia sesión para ver esta película</p>;
-  if (loading) return <p className="auth-message">Cargando película...</p>;
-  if (!movie) return <p>Película no encontrada</p>;
+  if (!user) return <p className="auth-message">{t('product.login')}</p>;
+  if (loading) return <p className="auth-message">Cargando...</p>;
+  if (!movie) return <p>{t('product.notFound')}</p>;
 
   const inFav = isFav(movie.id);
 
@@ -108,7 +110,7 @@ export default function ProductPage() {
             <h1>{movie.title}</h1>
             <p className="year">{movie.year}</p>
             <p className="duration">{movie.duration}</p>
-            <p className="director">Director: {movie.director}</p>
+            <p className="director">{t('product.director')}: {movie.director}</p>
             <p className="category-tag">{movie.category?.[0]}</p>
             {movie.rating && <Stars rating={movie.rating} />}
 
@@ -121,7 +123,7 @@ export default function ProductPage() {
 
         {movie.cast && movie.cast.length > 0 && (
           <section className="cast-section">
-            <h2>Reparto</h2>
+            <h2>{t('product.cast')}</h2>
             <div className="cast-grid">
               {movie.cast.map((actor, i) => (
                 <div key={i} className="cast-card">
@@ -134,22 +136,22 @@ export default function ProductPage() {
         )}
 
         <section className="descripcion-producto">
-          <h2>Sinopsis</h2>
+          <h2>{t('product.synopsis')}</h2>
           <div className="descripcion">
             <p>{movie.description}</p>
           </div>
           <div className="caracteristicas">
-            <h3>Detalles</h3>
-            <h4>Año: {movie.year}</h4>
-            <h4>Duración: {movie.duration}</h4>
-            <h4>Director: {movie.director}</h4>
-            <h4>Género: {movie.category?.[0]}</h4>
+            <h3>{t('product.details')}</h3>
+            <h4>{t('product.year')}: {movie.year}</h4>
+            <h4>{t('product.duration')}: {movie.duration}</h4>
+            <h4>{t('product.director')}: {movie.director}</h4>
+            <h4>{t('product.genre')}: {movie.category?.[0]}</h4>
           </div>
         </section>
 
         {movie.trailer && (
           <section className="trailer-section">
-            <h2>Tráiler</h2>
+            <h2>{t('product.trailer')}</h2>
             <div className="trailer-container">
               <iframe
                 src={movie.trailer}
@@ -163,11 +165,11 @@ export default function ProductPage() {
         )}
 
         <section className="comments-section">
-          <h2>Comentarios</h2>
+          <h2>{t('product.comments')}</h2>
 
           <form className="comment-form" onSubmit={handleSubmitComment}>
             <div className="comment-rating-select">
-              <span className="rating-label">Tu puntuación:</span>
+              <span className="rating-label">{t('product.yourRating')}:</span>
               <div className="stars-select">
                 {[1, 2, 3, 4, 5].map((star) => (
                   <span
@@ -182,19 +184,19 @@ export default function ProductPage() {
             </div>
             <textarea
               className="comment-input"
-              placeholder="Deja tu comentario sobre esta película..."
+              placeholder={t('product.leaveComment')}
               value={newComment}
               onChange={(e) => setNewComment(e.target.value)}
               rows={3}
             />
             <button type="submit" className="comment-submit-btn">
-              Publicar comentario
+              {t('product.publish')}
             </button>
           </form>
 
           <div className="comments-list">
             {comments.length === 0 ? (
-              <p className="no-comments">Sé el primero en comentar</p>
+              <p className="no-comments">{t('product.firstComment')}</p>
             ) : (
               comments.map((c, i) => (
                 <div key={i} className="comment-card">

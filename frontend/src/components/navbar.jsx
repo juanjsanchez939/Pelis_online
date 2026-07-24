@@ -4,6 +4,7 @@ import { UserContext } from "../context/UserContext.js";
 import { FiltersContext } from "../context/FiltersContext.js";
 import axios from "axios";
 import { getImageUrl, API_BASE_URL } from "../utils/shared.js";
+import { useTranslation } from "react-i18next";
 import "./navbar.css";
 
 const DarkIcon = () => (
@@ -27,11 +28,18 @@ const FilmReelIcon = () => (
 );
 
 const Navbar = ({ theme, toggleTheme }) => {
+  const { t, i18n } = useTranslation();
   const { user, logout } = useContext(UserContext);
   const { setFilters } = useContext(FiltersContext);
   const navigate = useNavigate();
   const location = useLocation();
   const isHome = location.pathname === "/";
+
+  const toggleLang = () => {
+    const next = i18n.language === 'es' ? 'en' : 'es';
+    i18n.changeLanguage(next);
+    localStorage.setItem('lang', next);
+  };
   const [searchText, setSearchText] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
   const [allProducts, setAllProducts] = useState([]);
@@ -110,7 +118,7 @@ const Navbar = ({ theme, toggleTheme }) => {
           <input
             ref={searchRef}
             type="text"
-            placeholder="Buscar películas..."
+            placeholder={t('navbar.search')}
             className="search"
             value={searchText}
             onChange={handleSearch}
@@ -135,7 +143,7 @@ const Navbar = ({ theme, toggleTheme }) => {
           )}
           {showDropdown && searchText.trim().length >= 2 && results.length === 0 && (
             <div className="search-dropdown">
-              <p className="search-no-results">No se encontraron películas</p>
+              <p className="search-no-results">{t('navbar.noResults')}</p>
             </div>
           )}
         </div>
@@ -143,24 +151,28 @@ const Navbar = ({ theme, toggleTheme }) => {
 
       <div className="navbar-right">
         <nav className="nav-links">
-          {!isHome && <Link to="/">Inicio</Link>}
-          <Link to="/ayuda">Más Info</Link>
-          {user && <Link to="/perfil">Mi Perfil</Link>}
-          {user?.roles?.includes("admin") && <Link to="/admin">Admin</Link>}
+          {!isHome && <Link to="/">{t('navbar.home')}</Link>}
+          <Link to="/ayuda">{t('navbar.moreInfo')}</Link>
+          {user && <Link to="/perfil">{t('navbar.myProfile')}</Link>}
+          {user?.roles?.includes("admin") && <Link to="/admin">{t('navbar.admin')}</Link>}
         </nav>
 
         {user ? (
           <>
             <span className="user-welcome">👤 {user.username}</span>
             <button className="logout-nav-btn" onClick={handleLogout}>
-              CERRAR SESIÓN
+              {t('navbar.logout')}
             </button>
           </>
         ) : (
           <Link to="/login">
-            <button className="login-nav-btn">INICIAR SESIÓN</button>
+            <button className="login-nav-btn">{t('navbar.login')}</button>
           </Link>
         )}
+
+        <button className="lang-toggle-btn" onClick={toggleLang} title={i18n.language === 'es' ? 'English' : 'Español'}>
+          {i18n.language === 'es' ? '🇺🇸' : '🇪🇸'}
+        </button>
 
         <button className="theme-toggle-btn" onClick={toggleTheme} title="Cambiar tema">
           {theme === "dark-theme" ? <LightIcon /> : <DarkIcon />}

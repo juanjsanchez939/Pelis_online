@@ -3,6 +3,7 @@ import axios from "axios";
 import { Products } from "./products.jsx";
 import { API_BASE_URL } from "../utils/shared.js";
 import { UserContext } from "../context/UserContext.js";
+import { useTranslation } from "react-i18next";
 
 const MOVIE_CATS = [
     { key: "popular", label: "Popular", icon: "🔥" },
@@ -19,6 +20,7 @@ const TV_CATS = [
 ];
 
 export default function TmdbSection({ mode = "movies" }) {
+    const { t } = useTranslation();
     const { user } = useContext(UserContext);
     const endpoint = mode === "tv" ? "/api/tv/all" : "/api/movies/all";
     const categories = mode === "tv" ? TV_CATS : MOVIE_CATS;
@@ -58,7 +60,7 @@ export default function TmdbSection({ mode = "movies" }) {
                 <Products products={display} limit={user ? undefined : 5} />
                 {!user && (
                     <p style={{ textAlign: 'center', padding: '20px', color: '#aaa' }}>
-                        <a href="/login" style={{ color: '#e50914' }}>Inicia sesión</a> para ver las {filtered.length} {mode === "tv" ? "series" : "películas"}
+                        <a href="/login" style={{ color: '#e50914' }}>{t('tmdb.loginPrompt')}</a> {t('tmdb.toSeeAll', { count: filtered.length, type: mode === "tv" ? t('tmdb.series') : t('tmdb.movies') })}
                     </p>
                 )}
             </div>

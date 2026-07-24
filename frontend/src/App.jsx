@@ -5,9 +5,12 @@ import { useState, useEffect, useMemo, useContext } from 'react'
 import axios from 'axios'
 import { Header } from './components/Header.jsx'
 import { Footer } from './components/Footer.jsx'
+import { useFilters } from './hooks/useFilters.js'
 import { API_BASE_URL } from './utils/shared.js'
 import { UserContext } from './context/UserContext.js'
+import { useTranslation } from 'react-i18next'
 import Login from './pages/Login.jsx'
+
 import Register from "./pages/Register.jsx"
 import ProductPage from './pages/ProductPage.jsx';
 import Ayuda from './pages/Ayuda.jsx'
@@ -18,6 +21,7 @@ import OnlineUsers from './components/OnlineUsers.jsx'
 import TmdbSection from './components/TmdbSection.jsx'
 
 function App() {
+  const { t } = useTranslation();
   const { user } = useContext(UserContext)
   const [products, setProducts] = useState([]);
   const [activeTab, setActiveTab] = useState("estreno2026")
@@ -66,21 +70,21 @@ function App() {
                   onClick={() => setActiveTab("estreno2026")}
                 >
                   <span className="tab-icon">🆕</span>
-                  Estreno 2026
+                  {t('tabs.estreno2026')}
                 </button>
                 <button
                   className={`tab-btn ${activeTab === "peliculas" ? "active" : ""}`}
                   onClick={() => setActiveTab("peliculas")}
                 >
                   <span className="tab-icon">🎬</span>
-                  Películas
+                  {t('tabs.peliculas')}
                 </button>
                 <button
                   className={`tab-btn ${activeTab === "series" ? "active" : ""}`}
                   onClick={() => setActiveTab("series")}
                 >
                   <span className="tab-icon">📺</span>
-                  Series
+                  {t('tabs.series')}
                 </button>
               </div>
 
@@ -89,15 +93,15 @@ function App() {
                   <div className="cinema-header">
                     <div className="cinema-strip" />
                     <h2 className="cinema-title">
-                      <span className="cinema-star">★</span> ESTRENOS 2026 <span className="cinema-star">★</span>
+                      <span className="cinema-star">★</span> {t('estreno.title')} <span className="cinema-star">★</span>
                     </h2>
-                    <p className="cinema-subtitle">Los lanzamientos más esperados del año</p>
+                    <p className="cinema-subtitle">{t('estreno.subtitle')}</p>
                     <div className="cinema-strip" />
                   </div>
                   <Products products={user ? releases2026 : releases2026.slice(0, 5)} limit={user ? undefined : 5} />
                   {!user && (
                     <p style={{ textAlign: 'center', padding: '20px', color: '#aaa' }}>
-                      <a href="/login" style={{ color: '#e50914' }}>Inicia sesión</a> para ver los {releases2026.length} estrenos de 2026
+                      <a href="/login" style={{ color: '#e50914' }}>{t('estreno.loginPrompt')}</a> {t('estreno.toSee', { count: releases2026.length })}
                     </p>
                   )}
                 </>

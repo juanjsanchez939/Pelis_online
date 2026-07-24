@@ -1,0 +1,105 @@
+{
+  "navbar": {
+    "home": "Inicio",
+    "moreInfo": "Más Info",
+    "myProfile": "Mi Perfil",
+    "admin": "Admin",
+    "login": "INICIAR SESIÓN",
+    "logout": "CERRAR SESIÓN",
+    "search": "Buscar películas...",
+    "noResults": "No se encontraron películas"
+  },
+  "tabs": {
+    "estreno2026": "Estreno 2026",
+    "peliculas": "Películas",
+    "series": "Series"
+  },
+  "estreno": {
+    "title": "ESTRENOS 2026",
+    "subtitle": "Los lanzamientos más esperados del año",
+    "loginPrompt": "Inicia sesión",
+    "toSee": "para ver los {{count}} estrenos de 2026"
+  },
+  "tmdb": {
+    "movies": "películas",
+    "series": "series",
+    "loginPrompt": "Inicia sesión",
+    "toSeeAll": "para ver las {{count}} {{type}}"
+  },
+  "header": {
+    "catalog": "Catálogo de Películas"
+  },
+  "banner": {
+    "viewCatalog": "Ver Catálogo"
+  },
+  "genre": {
+    "prompt": "Seleccioná un género arriba para ver las películas",
+    "noResults": "No hay resultados para \"{{genre}}\" con los filtros actuales"
+  },
+  "favorites": {
+    "added": "Agregaste \"{{title}}\" a favoritos",
+    "removed": "Quitaste \"{{title}}\" de favoritos",
+    "add": "Agregar a favoritos",
+    "favorite": "Favorito"
+  },
+  "product": {
+    "login": "Inicia sesión para ver esta película",
+    "notFound": "Película no encontrada",
+    "director": "Director",
+    "cast": "Reparto",
+    "synopsis": "Sinopsis",
+    "details": "Detalles",
+    "year": "Año",
+    "duration": "Duración",
+    "genre": "Género",
+    "trailer": "Tráiler",
+    "comments": "Comentarios",
+    "yourRating": "Tu puntuación",
+    "leaveComment": "Deja tu comentario sobre esta película...",
+    "publish": "Publicar comentario",
+    "firstComment": "Sé el primero en comentar",
+    "commentPublished": "Comentario publicado"
+  },
+  "login": {
+    "title": "Iniciar Sesión",
+    "username": "Usuario",
+    "password": "Contraseña",
+    "submit": "Iniciar Sesión",
+    "noAccount": "¿No tienes cuenta?",
+    "createAccount": "Crear cuenta",
+    "success": "Login exitoso",
+    "fillFields": "Por favor completa todos los campos",
+    "error": "Error conectando al servidor"
+  },
+  "register": {
+    "title": "Crear Cuenta",
+    "username": "Usuario",
+    "email": "Correo electrónico",
+    "password": "Contraseña (mínimo 8 caracteres)",
+    "confirm": "Confirmar contraseña",
+    "submit": "Registrarse",
+    "haveAccount": "¿Ya tienes una cuenta?",
+    "login": "Iniciar sesión",
+    "success": "Usuario registrado correctamente. Redirigiendo...",
+    "passwordMismatch": "Las contraseñas no coinciden",
+    "passwordShort": "La contraseña debe tener al menos 8 caracteres",
+    "userTaken": "El nombre de usuario no está disponible"
+  },
+  "user": {
+    "myProfile": "Mi Perfil",
+    "registerData": "Datos de registro",
+    "user": "Usuario",
+    "fullName": "Nombre completo",
+    "email": "Correo",
+    "roles": "Roles",
+    "logout": "Cerrar Sesión",
+    "favorites": "Películas favoritas",
+    "noFavs": "No tienes películas favoritas aún.",
+    "explore": "Explora el catálogo",
+    "clearFavs": "Limpiar favoritos"
+  },
+  "admin": {
+    "panel": "Panel de Administración",
+    "restricted": "Acceso restringido. Necesitas permisos de administrador."
+  }
+}
