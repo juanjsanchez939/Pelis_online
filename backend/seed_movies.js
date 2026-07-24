@@ -1,5 +1,7 @@
 import axios from 'axios';
 import mongoose from 'mongoose';
+import bcrypt from 'bcrypt';
+import crypto from 'crypto';
 
 const API_KEY = '8d7cd14f75ff2bb827d966152a610eab';
 const TMDB_BASE = 'https://api.themoviedb.org/3';
@@ -139,3 +141,24 @@ export async function seedMovies() {
 
     console.log(`\n🎉 ${added} películas sembradas`);
 }
+
+export async function seedAdmin() {
+    const UserModel = mongoose.model('users');
+    const existing = await UserModel.findOne({ username: 'admin' });
+    if (existing) {
+        console.log('👤 Admin ya existe');
+        return;
+    }
+
+    await new UserModel({
+        uuid: crypto.randomUUID(),
+        username: 'admin',
+        fullName: 'Administrador',
+        email: 'admin@pelisonline.com',
+        hashedPassword: bcrypt.hashSync('admin123', 10),
+        roles: ['admin', 'user'],
+    }).save();
+
+    console.log('👤 Usuario admin creado (admin / admin123)');
+}
+

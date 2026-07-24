@@ -3,7 +3,7 @@ import config from './config.js';
 import mongoose from 'mongoose';
 import configureDependencies from './configure_dependencies.js';
 import configureMiddlewares from './middlewares/configure_middlewares.js';
-import { seedMovies } from './seed_movies.js';
+import { seedMovies, seedAdmin } from './seed_movies.js';
 
 if (!config.jwtKey) {
   console.warn('⚠️  No se ha definido un JWT_KEY. La autenticación no funcionará.');
@@ -23,8 +23,11 @@ mongoose.connect(config.dbConnection, {
     const MovieModel = mongoose.model('movies');
     const count = await MovieModel.countDocuments();
     if (count === 0) {
-      console.log('📥 Base de datos vacía. Sembrando películas...');
+      console.log('📥 Base de datos vacía. Sembrando...');
       await seedMovies();
+      await seedAdmin();
+    } else {
+      await seedAdmin();
     }
   })
   .catch(error => {

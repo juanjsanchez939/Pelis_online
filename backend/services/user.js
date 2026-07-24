@@ -1,6 +1,7 @@
 import { InvalidArgumentException } from "../exceptions/invalid_argument_exception.js";
 import { getDependency } from "../libs/dependencies.js";
 import bcrypt from "bcrypt";
+import crypto from "crypto";
 
 export class UserService {
   static async getSingleOrNullByUsername(username) {
