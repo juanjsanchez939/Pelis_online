@@ -46,6 +46,14 @@ async function start() {
     res.json({ name: 'PelisOnline API', status: 'online', endpoints: ['/movies', '/login', '/register'] });
   });
 
+  app.get('/reseed', async (req, res) => {
+    const MovieModel = mongoose.model('movies');
+    await MovieModel.deleteMany({});
+    res.json({ status: 'Resembrando...' });
+    await seedMovies();
+    console.log('✅ Resiembra completada');
+  });
+
   app.listen(config.port, '0.0.0.0', () => {
     console.log(`🚀 Servidor corriendo en http://0.0.0.0:${config.port}`);
   });
