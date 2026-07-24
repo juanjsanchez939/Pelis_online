@@ -423,7 +423,23 @@
   flex-wrap: wrap;
   gap: 10px;
   margin-top: 16px;
-  padding: 0 16px;
+  padding: 16px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.mobile-menu-actions .login-nav-btn,
+.mobile-menu-actions .logout-nav-btn {
+  animation: none;
+  font-size: 0.85rem;
+}
+
+.mobile-menu-actions .lang-toggle-btn,
+.mobile-menu-actions .theme-toggle-btn {
+  width: auto;
+  height: auto;
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-size: 0.85rem;
 }
 
 @media (max-width: 768px) {
