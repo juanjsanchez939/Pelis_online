@@ -230,3 +230,8 @@
   color: #e50914;
   font-size: 1.1rem;
 }
+
+
+@media (max-width: 768px) {
+  .user-panel-page, .admin-panel-page, .ayuda-page { padding: 80px 1rem 2rem; }
+}

@@ -42,6 +42,7 @@ const Navbar = ({ theme, toggleTheme }) => {
   };
   const [searchText, setSearchText] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
+  const [mobileMenu, setMobileMenu] = useState(false);
   const [allProducts, setAllProducts] = useState([]);
   const searchRef = useRef(null);
   const dropdownRef = useRef(null);
@@ -149,7 +150,7 @@ const Navbar = ({ theme, toggleTheme }) => {
         </div>
       </div>
 
-      <div className="navbar-right">
+      <div className="navbar-right desktop-only">
         <nav className="nav-links">
           {!isHome && <Link to="/">{t('navbar.home')}</Link>}
           <Link to="/ayuda">{t('navbar.moreInfo')}</Link>
@@ -178,6 +179,36 @@ const Navbar = ({ theme, toggleTheme }) => {
           {theme === "dark-theme" ? <LightIcon /> : <DarkIcon />}
         </button>
       </div>
+
+      <button className="hamburger" onClick={() => setMobileMenu(!mobileMenu)}>
+        <span className={`hamburger-line ${mobileMenu ? "open" : ""}`} />
+        <span className={`hamburger-line ${mobileMenu ? "open" : ""}`} />
+        <span className={`hamburger-line ${mobileMenu ? "open" : ""}`} />
+      </button>
+
+      {mobileMenu && (
+        <div className="mobile-menu">
+          <div className="mobile-menu-inner">
+            {!isHome && <Link to="/" onClick={() => setMobileMenu(false)}>{t('navbar.home')}</Link>}
+            <Link to="/ayuda" onClick={() => setMobileMenu(false)}>{t('navbar.moreInfo')}</Link>
+            {user && <Link to="/perfil" onClick={() => setMobileMenu(false)}>{t('navbar.myProfile')}</Link>}
+            {user?.roles?.includes("admin") && <Link to="/admin" onClick={() => setMobileMenu(false)}>{t('navbar.admin')}</Link>}
+            <div className="mobile-menu-actions">
+              {user ? (
+                <button className="logout-nav-btn" onClick={() => { handleLogout(); setMobileMenu(false); }}>{t('navbar.logout')}</button>
+              ) : (
+                <Link to="/login" onClick={() => setMobileMenu(false)}>
+                  <button className="login-nav-btn">{t('navbar.login')}</button>
+                </Link>
+              )}
+              <button className="lang-toggle-btn" onClick={toggleLang}>{i18n.language === 'es' ? '🇺🇸 EN' : '🇪🇸 ES'}</button>
+              <button className="theme-toggle-btn" onClick={toggleTheme}>
+                {theme === "dark-theme" ? <LightIcon /> : <DarkIcon />}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </header>
   );
 };

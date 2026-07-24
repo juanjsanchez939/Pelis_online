@@ -124,3 +124,10 @@
     max-width: 90%;
   }
 }
+
+
+@media (max-width: 480px) {
+  .login-form { padding: 1.5rem 1.2rem; max-width: 100%; border-radius: 12px; }
+  .login-page { padding-top: 90px; }
+  .logo { font-size: 1.4rem; }
+}
