@@ -61,15 +61,15 @@ export default function HomeScreen({ navigation }) {
   }, []);
 
   const topRated = useMemo(() => {
-    return [...products].sort((a, b) => b.rating - a.rating).slice(0, 10);
+    return Array.isArray(products) ? products.slice().sort((a, b) => b.rating - a.rating).slice(0, 10) : [];
   }, [products]);
 
   const genres = useMemo(() => {
     const map = {};
     products.forEach((p) => {
-      const cat = p.category[0];
-      if (!map[cat]) map[cat] = [];
-      map[cat].push(p);
+      const cat = p.category?.[0];
+      if (cat && !map[cat]) map[cat] = [];
+      if (cat) map[cat].push(p);
     });
     return map;
   }, [products]);
