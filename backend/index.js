@@ -42,6 +42,10 @@ async function start() {
 
   configureMiddlewares(router);
 
+  app.get('/', (req, res) => {
+    res.json({ name: 'PelisOnline API', status: 'online', endpoints: ['/movies', '/login', '/register'] });
+  });
+
   app.listen(config.port, '0.0.0.0', () => {
     console.log(`🚀 Servidor corriendo en http://0.0.0.0:${config.port}`);
   });
