@@ -49,9 +49,14 @@ const Navbar = ({ theme, toggleTheme }) => {
 
   useEffect(() => {
     const handler = () => setMobileMenu(false);
-    window.addEventListener("scroll", handler);
+    window.addEventListener("scroll", handler, { passive: true });
     return () => window.removeEventListener("scroll", handler);
   }, []);
+
+  useEffect(() => {
+    document.body.style.overflow = mobileMenu ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [mobileMenu]);
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -193,8 +198,9 @@ const Navbar = ({ theme, toggleTheme }) => {
       </button>
 
       {mobileMenu && (
-        <div className="mobile-menu">
-          <div className="mobile-menu-inner">
+        <div className="mobile-menu" onClick={() => setMobileMenu(false)}>
+          <div className="mobile-menu-inner" onClick={e => e.stopPropagation()}>
+            <button className="mobile-close" onClick={() => setMobileMenu(false)}>✕</button>
             {!isHome && <Link to="/" onClick={() => setMobileMenu(false)}>{t('navbar.home')}</Link>}
             <Link to="/ayuda" onClick={() => setMobileMenu(false)}>{t('navbar.moreInfo')}</Link>
             {user && <Link to="/perfil" onClick={() => setMobileMenu(false)}>{t('navbar.myProfile')}</Link>}

@@ -397,16 +397,33 @@
     right: 0;
     bottom: 0;
     background: #0c0c0e;
-    backdrop-filter: blur(20px);
     z-index: 250;
     animation: slideDown 0.3s ease;
     overflow-y: auto;
+  }
+
+  .mobile-close {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    background: rgba(255,255,255,0.1);
+    border: none;
+    color: #fff;
+    font-size: 20px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .mobile-menu-inner {
     display: flex;
     flex-direction: column;
     padding: 24px;
+    padding-top: 60px;
     gap: 4px;
   }
 
