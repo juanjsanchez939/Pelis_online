@@ -4,17 +4,17 @@ import { Products } from "./products.jsx";
 import { API_BASE_URL } from "../utils/shared.js";
 
 const MOVIE_CATS = [
-    { key: "popular", label: "Populares", icon: "🔥" },
-    { key: "now-playing", label: "En Cartelera", icon: "🎟️" },
-    { key: "upcoming", label: "Próximamente", icon: "📅" },
-    { key: "top-rated", label: "Mejor Puntuadas", icon: "⭐" },
+    { key: "popular", label: "Popular", icon: "🔥" },
+    { key: "now-playing", label: "Now Playing", icon: "🎟️" },
+    { key: "upcoming", label: "Upcoming", icon: "📅" },
+    { key: "top-rated", label: "Top Rated", icon: "⭐" },
 ];
 
 const TV_CATS = [
-    { key: "popular", label: "Populares", icon: "📺" },
-    { key: "airing-today", label: "Se Emiten Hoy", icon: "🕐" },
-    { key: "on-the-air", label: "En Televisión", icon: "📡" },
-    { key: "top-rated", label: "Mejor Valoradas", icon: "⭐" },
+    { key: "popular", label: "Popular", icon: "📺" },
+    { key: "airing-today", label: "Airing Today", icon: "🕐" },
+    { key: "on-the-air", label: "On TV", icon: "📡" },
+    { key: "top-rated", label: "Top Rated", icon: "⭐" },
 ];
 
 export default function TmdbSection({ mode = "movies" }) {
