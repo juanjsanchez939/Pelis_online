@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react";
 import "./Login.css";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
+import { API_BASE_URL } from "../utils/shared.js";
 
 export default function Login() {
   const { login } = useContext(UserContext);
@@ -21,7 +22,7 @@ export default function Login() {
     }
 
     try {
-      const res = await fetch("/api/login", {
+      const res = await fetch(`${API_BASE_URL}/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password })

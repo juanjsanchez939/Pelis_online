@@ -2,6 +2,7 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext.js";
+import { API_BASE_URL } from "../utils/shared.js";
 import "./AdminPanel.css";
 
 export default function AdminPanel() {
@@ -96,7 +97,7 @@ function UserManager({ apiHeaders }) {
 
     try {
       if (editingUser) {
-        const res = await fetch(`/api/user/${editingUser.uuid}`, {
+        const res = await fetch(`${API_BASE_URL}/user/${editingUser.uuid}`, {
           method: "PATCH",
           headers: apiHeaders,
           body: JSON.stringify(body),
@@ -145,7 +146,7 @@ function UserManager({ apiHeaders }) {
   const handleDelete = async (uuid) => {
     if (!window.confirm("¿Eliminar este usuario?")) return;
     try {
-      const res = await fetch(`/api/user/${uuid}`, {
+      const res = await fetch(`${API_BASE_URL}/user/${uuid}`, {
         method: "DELETE",
         headers: apiHeaders,
       });
@@ -290,7 +291,7 @@ function MovieManager({ apiHeaders }) {
 
     try {
       if (editingMovie) {
-        const res = await fetch(`/api/movies/${editingMovie._id}`, {
+        const res = await fetch(`${API_BASE_URL}/movies/${editingMovie._id}`, {
           method: "PATCH",
           headers: apiHeaders,
           body: JSON.stringify(body),
@@ -347,7 +348,7 @@ function MovieManager({ apiHeaders }) {
   const handleDelete = async (id) => {
     if (!window.confirm("¿Eliminar esta película?")) return;
     try {
-      const res = await fetch(`/api/movies/${id}`, {
+      const res = await fetch(`${API_BASE_URL}/movies/${id}`, {
         method: "DELETE",
         headers: apiHeaders,
       });

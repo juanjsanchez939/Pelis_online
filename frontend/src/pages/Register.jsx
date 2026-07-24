@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./Register.css";
 import { Link } from "react-router-dom";
 import axios from 'axios'
+import { API_BASE_URL } from "../utils/shared.js";
 
 export default function Register() {
   const [ username, setUsername] = useState("")
@@ -21,7 +22,7 @@ export default function Register() {
       return
     }
 
-    axios.post('/api/register', {username, email, password})
+    axios.post(`${API_BASE_URL}/register`, {username, email, password})
       .then(() => {
         setSuccess("Usuario registrado correctamente. Redirigiendo...")
         setUsername("")
