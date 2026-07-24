@@ -3,6 +3,7 @@ import config from './config.js';
 import mongoose from 'mongoose';
 import configureDependencies from './configure_dependencies.js';
 import configureMiddlewares from './middlewares/configure_middlewares.js';
+import { seedMovies } from './seed_movies.js';
 
 if (!config.jwtKey) {
   console.warn('⚠️  No se ha definido un JWT_KEY. La autenticación no funcionará.');
@@ -14,10 +15,17 @@ mongoose.connect(config.dbConnection, {
   dbName: config.dbName,
   serverSelectionTimeoutMS: 5000,
 })
-  .then(() => {
+  .then(async () => {
     console.log('✅ Conectado a MongoDB exitosamente');
     console.log(`🖥️  Host: ${mongoose.connection.host}`);
     console.log(`📊 Base de datos: ${config.dbName}`);
+
+    const MovieModel = mongoose.model('movies');
+    const count = await MovieModel.countDocuments();
+    if (count === 0) {
+      console.log('📥 Base de datos vacía. Sembrando películas...');
+      await seedMovies();
+    }
   })
   .catch(error => {
     console.error('❌ Error al conectar a MongoDB:', error.message);
