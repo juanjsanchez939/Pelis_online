@@ -154,6 +154,11 @@ const Navbar = ({ theme, toggleTheme }) => {
             </div>
           )}
         </div>
+        <button className={`hamburger ${mobileMenu ? "open" : ""}`} onClick={() => setMobileMenu(!mobileMenu)}>
+          <span className="hamburger-line" />
+          <span className="hamburger-line" />
+          <span className="hamburger-line" />
+        </button>
       </div>
 
       <div className="navbar-right desktop-only">
@@ -185,12 +190,6 @@ const Navbar = ({ theme, toggleTheme }) => {
           {theme === "dark-theme" ? <LightIcon /> : <DarkIcon />}
         </button>
       </div>
-
-      <button className={`hamburger ${mobileMenu ? "open" : ""}`} onClick={() => setMobileMenu(!mobileMenu)}>
-        <span className="hamburger-line" />
-        <span className="hamburger-line" />
-        <span className="hamburger-line" />
-      </button>
 
       <div className={`mobile-menu ${mobileMenu ? "open" : ""}`}>
         <div className="mobile-menu-inner">

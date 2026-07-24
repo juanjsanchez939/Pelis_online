@@ -352,10 +352,10 @@
 
 .hamburger-line {
   display: block;
-  width: 24px;
-  height: 2px;
-  background: #fff;
-  border-radius: 2px;
+  width: 22px;
+  height: 3px;
+  background: #e50914;
+  border-radius: 3px;
   transition: all 0.3s ease;
 }
 
@@ -376,7 +376,8 @@
 }
 
 .mobile-menu.open {
-  display: block;
+  display: flex;
+  flex-direction: column;
 }
 
 .mobile-close {
@@ -443,24 +444,13 @@
 }
 
 @media (max-width: 768px) {
-  .navbar {
-    padding: 0 1rem;
-  }
-
+  .navbar { padding: 0 0.75rem; }
   .desktop-only { display: none; }
+  .navbar-center { flex: 1; justify-content: flex-end; margin: 0; }
+  .search { width: 110px; font-size: 0.8rem; }
+  .search:focus { width: 130px; }
+  .search-dropdown { width: 260px; right: -20px; }
 
-  .hamburger { display: flex; }
-
-  .search {
-    width: 140px;
-  }
-
-  .search:focus {
-    width: 160px;
-  }
-
-  .search-dropdown {
-    width: 280px;
-    right: -60px;
-  }
+  .hamburger { display: flex; margin-left: 8px; }
+  .mobile-menu.open { display: flex; flex-direction: column; }
 }
