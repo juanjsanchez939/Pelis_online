@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useFavs } from "../hooks/useFavs.js";
 import { SnackbarContext } from "../context/snackbarContext.js";
@@ -25,17 +25,10 @@ function Stars({ rating }) {
 
 export default function ProductPage() {
   const { id } = useParams();
-  const navigate = useNavigate();
   const { user } = useContext(UserContext);
   const { t } = useTranslation();
   const [movie, setMovie] = useState(null);
   const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    if (!user) {
-      navigate(`/login?redirect=/product/${id}`);
-    }
-  }, [user, id, navigate]);
 
   useEffect(() => {
     window.scrollTo({ top: 0 });
@@ -44,7 +37,11 @@ export default function ProductPage() {
   useEffect(() => {
     const fetchMovie = async () => {
       try {
-        const res = await axios.get(`${API_BASE_URL}/movies/${id}`);
+        const isNumeric = /^\d+$/.test(id);
+        const url = isNumeric
+          ? `${API_BASE_URL}/tmdb/movie/${id}`
+          : `${API_BASE_URL}/movies/${id}`;
+        const res = await axios.get(url);
         setMovie(res.data);
       } catch (e) {
         console.error('Error fetching movie:', e);
@@ -67,7 +64,6 @@ export default function ProductPage() {
     }
   }, [movie]);
 
-  if (!user) return <p className="auth-message">{t('product.login')}</p>;
   if (loading) return <p className="auth-message">Cargando...</p>;
   if (!movie) return <p>{t('product.notFound')}</p>;
 
@@ -114,10 +110,12 @@ export default function ProductPage() {
             <p className="category-tag">{movie.category?.[0]}</p>
             {movie.rating && <Stars rating={movie.rating} />}
 
+            {user && (
             <button className="buy-button" onClick={handleFavClick}>
               {inFav ? <HeartFilledIcon /> : <HeartIcon />}
               {inFav ? " Quitar de favoritos" : " Agregar a favoritos"}
             </button>
+            )}
           </div>
         </div>
 
@@ -167,6 +165,7 @@ export default function ProductPage() {
         <section className="comments-section">
           <h2>{t('product.comments')}</h2>
 
+          {user && (
           <form className="comment-form" onSubmit={handleSubmitComment}>
             <div className="comment-rating-select">
               <span className="rating-label">{t('product.yourRating')}:</span>
@@ -193,6 +192,7 @@ export default function ProductPage() {
               {t('product.publish')}
             </button>
           </form>
+          )}
 
           <div className="comments-list">
             {comments.length === 0 ? (
