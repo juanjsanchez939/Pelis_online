@@ -30,13 +30,6 @@ const Banner = () => {
   ))}
 
   <div className="banner-content">
-    <div className="banner-logo-wrapper">
-      <div className="banner-reel">
-        <div className="banner-reel-ring" />
-      </div>
-      <h1>Pelis<span>Online</span></h1>
-    </div>
-    <p>Tu catálogo de películas favoritas en un solo lugar</p>
     <button className="btn-primary" onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}>Ver Catálogo</button>
   </div>
 </section>

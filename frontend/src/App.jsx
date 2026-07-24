@@ -5,7 +5,6 @@ import { useState, useEffect, useMemo, useContext } from 'react'
 import axios from 'axios'
 import { Header } from './components/Header.jsx'
 import { Footer } from './components/Footer.jsx'
-import { useFilters } from './hooks/useFilters.js'
 import { API_BASE_URL } from './utils/shared.js'
 import { UserContext } from './context/UserContext.js'
 import Login from './pages/Login.jsx'
@@ -16,13 +15,12 @@ import UserPanel from './pages/UserPanel.jsx'
 import AdminPanel from './pages/AdminPanel.jsx'
 import Banner from './components/Banner.jsx'
 import OnlineUsers from './components/OnlineUsers.jsx'
-import { GENRE_ORDER, GENRE_ICONS } from './utils/shared.js'
 import TmdbSection from './components/TmdbSection.jsx'
 
 function App() {
   const { user } = useContext(UserContext)
   const [products, setProducts] = useState([]);
-  const { filterProducts } = useFilters()
+  const [activeTab, setActiveTab] = useState("estreno2026")
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -36,25 +34,8 @@ function App() {
     fetchMovies();
   }, []);
 
-  const topRated = useMemo(() => {
-    return [...products].sort((a, b) => b.rating - a.rating).slice(0, 10);
-  }, [products]);
-
   const releases2026 = useMemo(() => {
     return products.filter(p => p.year === 2026);
-  }, [products]);
-
-  const [expandedGenre, setExpandedGenre] = useState(null)
-  const [activeTab, setActiveTab] = useState("top10")
-
-  const genres = useMemo(() => {
-    const genreMap = {};
-    products.forEach(p => {
-      const cat = p.category?.[0];
-      if (cat && !genreMap[cat]) genreMap[cat] = [];
-      if (cat) genreMap[cat].push(p);
-    });
-    return genreMap;
   }, [products]);
 
   const [theme, setTheme] = useState("dark-theme");
@@ -66,14 +47,6 @@ function App() {
   const toggleTheme = () => {
     setTheme((prev) => (prev === "dark-theme" ? "light-theme" : "dark-theme"));
   }
-
-  const filteredGenres = useMemo(() => {
-    const result = {};
-    Object.entries(genres).forEach(([genre, movies]) => {
-      result[genre] = filterProducts(movies);
-    });
-    return result;
-  }, [genres, filterProducts]);
 
   return (
     <>
@@ -89,20 +62,6 @@ function App() {
 
               <div className="catalog-tabs">
                 <button
-                  className={`tab-btn ${activeTab === "top10" ? "active" : ""}`}
-                  onClick={() => { setActiveTab("top10"); setExpandedGenre(null); }}
-                >
-                  <span className="tab-icon">⭐</span>
-                  Top 10
-                </button>
-                <button
-                  className={`tab-btn ${activeTab === "genres" ? "active" : ""}`}
-                  onClick={() => setActiveTab("genres")}
-                >
-                  <span className="tab-icon">🎬</span>
-                  Géneros
-                </button>
-                <button
                   className={`tab-btn ${activeTab === "estreno2026" ? "active" : ""}`}
                   onClick={() => setActiveTab("estreno2026")}
                 >
@@ -110,72 +69,34 @@ function App() {
                   Estreno 2026
                 </button>
                 <button
-                  className={`tab-btn ${activeTab === "tmdb" ? "active" : ""}`}
-                  onClick={() => setActiveTab("tmdb")}
+                  className={`tab-btn ${activeTab === "peliculas" ? "active" : ""}`}
+                  onClick={() => setActiveTab("peliculas")}
                 >
-                  <span className="tab-icon">🌎</span>
-                  Descubrir
+                  <span className="tab-icon">🎬</span>
+                  Películas
+                </button>
+                <button
+                  className={`tab-btn ${activeTab === "series" ? "active" : ""}`}
+                  onClick={() => setActiveTab("series")}
+                >
+                  <span className="tab-icon">📺</span>
+                  Series
                 </button>
               </div>
 
-              {activeTab === "top10" && (
-                <>
-                  <p className="section-subtitle" style={{ paddingLeft: 16 }}>Las mejores calificaciones de nuestra comunidad</p>
-                  <Products products={topRated} limit={10} />
-                </>
-              )}
-
-              {activeTab === "genres" && user && (
-                <>
-                  <div className="genre-vertical">
-                    {GENRE_ORDER.map(genre => (
-                      <button
-                        key={genre}
-                        className={`genre-vbtn ${expandedGenre === genre ? "active" : ""}`}
-                        onClick={() => setExpandedGenre(expandedGenre === genre ? null : genre)}
-                      >
-                        <span className="genre-vicon">{GENRE_ICONS[genre]}</span>
-                        <span className="genre-vname">{genre}</span>
-                        <span className="genre-vcount">{filteredGenres[genre]?.length || 0}</span>
-                      </button>
-                    ))}
-                  </div>
-                  <div className="catalog-content" style={{ padding: '12px 16px' }}>
-                    {expandedGenre && filteredGenres[expandedGenre] && (
-                      filteredGenres[expandedGenre].length > 0 ? (
-                        <Products products={filteredGenres[expandedGenre]} />
-                      ) : (
-                        <p className="genre-prompt">No hay resultados para "{expandedGenre}" con los filtros actuales</p>
-                      )
-                    )}
-                    {!expandedGenre && (
-                      <p className="genre-prompt">Seleccioná un género arriba para ver las películas</p>
-                    )}
-                  </div>
-                </>
-              )}
-
-              {activeTab === "genres" && !user && (
-                <p className="genre-prompt" style={{ padding: '40px', textAlign: 'center' }}>
-                  <a href="/login" style={{ color: '#e50914' }}>Iniciá sesión</a> para ver el catálogo por género
-                </p>
-              )}
-
-              {activeTab === "estreno2026" && user && (
+              {activeTab === "estreno2026" && (
                 <>
                   <p className="section-subtitle" style={{ paddingLeft: 16 }}>Los lanzamientos más esperados de 2026</p>
                   <Products products={releases2026} />
                 </>
               )}
 
-              {activeTab === "estreno2026" && !user && (
-                <p className="genre-prompt" style={{ padding: '40px', textAlign: 'center' }}>
-                  <a href="/login" style={{ color: '#e50914' }}>Iniciá sesión</a> para ver los estrenos de 2026
-                </p>
+              {activeTab === "peliculas" && (
+                <TmdbSection mode="movies" />
               )}
 
-              {activeTab === "tmdb" && (
-                <TmdbSection />
+              {activeTab === "series" && (
+                <TmdbSection mode="tv" />
               )}
 
               <Footer />
@@ -200,4 +121,3 @@ function App() {
 }
 
 export default App;
-
