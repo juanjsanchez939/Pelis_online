@@ -66,18 +66,18 @@ export class TmdbService {
     }
 
     static async getPopularTv() {
-        return await TmdbService.fetchPages(`${TMDB}/tv/popular?api_key=${API_KEY}&language=es-ES`, 4, 'popular', mapTv);
+        return await TmdbService.fetchPages(`${TMDB}/tv/popular?api_key=${API_KEY}&language=es-ES`, 7, 'popular', mapTv);
     }
 
     static async getAiringToday() {
-        return await TmdbService.fetchPages(`${TMDB}/tv/airing_today?api_key=${API_KEY}&language=es-ES`, 4, 'airing-today', mapTv);
+        return await TmdbService.fetchPages(`${TMDB}/tv/airing_today?api_key=${API_KEY}&language=es-ES`, 7, 'airing-today', mapTv);
     }
 
     static async getOnTheAir() {
-        return await TmdbService.fetchPages(`${TMDB}/tv/on_the_air?api_key=${API_KEY}&language=es-ES`, 4, 'on-the-air', mapTv);
+        return await TmdbService.fetchPages(`${TMDB}/tv/on_the_air?api_key=${API_KEY}&language=es-ES`, 7, 'on-the-air', mapTv);
     }
 
     static async getTopRatedTv() {
-        return await TmdbService.fetchPages(`${TMDB}/tv/top_rated?api_key=${API_KEY}&language=es-ES`, 4, 'top-rated', mapTv);
+        return await TmdbService.fetchPages(`${TMDB}/tv/top_rated?api_key=${API_KEY}&language=es-ES`, 7, 'top-rated', mapTv);
     }
 }
