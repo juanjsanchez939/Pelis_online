@@ -54,11 +54,6 @@ const Navbar = ({ theme, toggleTheme }) => {
   }, []);
 
   useEffect(() => {
-    document.body.style.overflow = mobileMenu ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
-  }, [mobileMenu]);
-
-  useEffect(() => {
     const fetchMovies = async () => {
       try {
         const res = await axios.get(`${API_BASE_URL}/movies`);
