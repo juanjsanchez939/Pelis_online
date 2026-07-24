@@ -84,9 +84,10 @@
 .banner-image {
   position: absolute;
   inset: 0;
-  background-size: cover;
+  background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
+  background-color: #0d0d0d;
   opacity: 0;
   transition: opacity 1.5s ease;
   transform: scale(1.03);
