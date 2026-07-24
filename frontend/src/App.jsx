@@ -86,7 +86,14 @@ function App() {
 
               {activeTab === "estreno2026" && (
                 <>
-                  <p className="section-subtitle" style={{ paddingLeft: 16 }}>Los lanzamientos más esperados de 2026</p>
+                  <div className="cinema-header">
+                    <div className="cinema-strip" />
+                    <h2 className="cinema-title">
+                      <span className="cinema-star">★</span> ESTRENOS 2026 <span className="cinema-star">★</span>
+                    </h2>
+                    <p className="cinema-subtitle">Los lanzamientos más esperados del año</p>
+                    <div className="cinema-strip" />
+                  </div>
                   <Products products={releases2026} />
                 </>
               )}
