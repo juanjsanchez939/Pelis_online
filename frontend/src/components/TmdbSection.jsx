@@ -2,11 +2,26 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { Products } from "./products.jsx";
 import { API_BASE_URL } from "../utils/shared.js";
-import "./TmdbSection.css";
+
+const MOVIE_CATS = [
+    { key: "popular", label: "Populares", icon: "🔥" },
+    { key: "now-playing", label: "En Cartelera", icon: "🎟️" },
+    { key: "upcoming", label: "Próximamente", icon: "📅" },
+    { key: "top-rated", label: "Mejor Puntuadas", icon: "⭐" },
+];
+
+const TV_CATS = [
+    { key: "popular", label: "Populares", icon: "📺" },
+    { key: "airing-today", label: "Se Emiten Hoy", icon: "🕐" },
+    { key: "on-the-air", label: "En Televisión", icon: "📡" },
+    { key: "top-rated", label: "Mejor Valoradas", icon: "⭐" },
+];
 
 export default function TmdbSection({ mode = "movies" }) {
     const endpoint = mode === "tv" ? "/api/tv/all" : "/api/movies/all";
+    const categories = mode === "tv" ? TV_CATS : MOVIE_CATS;
     const [items, setItems] = useState([]);
+    const [cat, setCat] = useState("all");
 
     useEffect(() => {
         axios.get(`${API_BASE_URL}${endpoint}`)
@@ -14,12 +29,33 @@ export default function TmdbSection({ mode = "movies" }) {
             .catch(() => setItems([]));
     }, [mode]);
 
+    const filtered = cat === "all" ? items : items.filter(m => m.tag === cat);
+
     return (
-        <div style={{ padding: '0 16px' }}>
-            <p className="section-subtitle" style={{ padding: '12px 0' }}>
-                {mode === "tv" ? `📺 ${items.length} series` : `🎬 ${items.length} películas`}
-            </p>
-            <Products products={items} />
+        <div>
+            <div className="genre-vertical">
+                <button
+                    className={`genre-vbtn ${cat === "all" ? "active" : ""}`}
+                    onClick={() => setCat("all")}
+                >
+                    <span className="genre-vname">Todas</span>
+                    <span className="genre-vcount">{items.length}</span>
+                </button>
+                {categories.map(c => (
+                    <button
+                        key={c.key}
+                        className={`genre-vbtn ${cat === c.key ? "active" : ""}`}
+                        onClick={() => setCat(c.key)}
+                    >
+                        <span className="genre-vicon">{c.icon}</span>
+                        <span className="genre-vname">{c.label}</span>
+                        <span className="genre-vcount">{cat === c.key ? filtered.length : items.filter(m => m.tag === c.key).length}</span>
+                    </button>
+                ))}
+            </div>
+            <div style={{ padding: '0 16px' }}>
+                <Products products={filtered} />
+            </div>
         </div>
     );
 }

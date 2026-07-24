@@ -8,7 +8,7 @@ const GENRE_MAP = {
     10752: 'Bélicas', 35: 'Comedias', 27: 'Terror'
 };
 
-function mapMovie(m) {
+function mapMovie(m, tag) {
     return {
         id: m.id,
         title: m.title,
@@ -19,10 +19,11 @@ function mapMovie(m) {
         year: m.release_date ? new Date(m.release_date).getFullYear() : null,
         rating: Math.round((m.vote_average / 2) * 10) / 10,
         backdrop: m.backdrop_path,
+        tag: tag,
     };
 }
 
-function mapTv(t) {
+function mapTv(t, tag) {
     return {
         id: t.id,
         title: t.name,
@@ -32,57 +33,51 @@ function mapTv(t) {
         year: t.first_air_date ? new Date(t.first_air_date).getFullYear() : null,
         rating: Math.round((t.vote_average / 2) * 10) / 10,
         backdrop: t.backdrop_path,
+        tag: tag,
     };
 }
 
 export class TmdbService {
-    static async fetchPages(urlBase, pages = 5) {
+    static async fetchPages(urlBase, pages, tag, mapper) {
         let all = [];
         for (let p = 1; p <= pages; p++) {
             const res = await axios.get(`${urlBase}&page=${p}`);
-            all = all.concat(res.data.results || []);
+            const results = (res.data.results || []).map(m => mapper(m, tag));
+            all = all.concat(results);
             if (p >= (res.data.total_pages || 1)) break;
         }
         return all;
     }
 
     static async getPopularMovies() {
-        const all = await TmdbService.fetchPages(`${TMDB}/movie/popular?api_key=${API_KEY}&language=es-ES`, 7);
-        return all.map(mapMovie);
+        return await TmdbService.fetchPages(`${TMDB}/movie/popular?api_key=${API_KEY}&language=es-ES`, 7, 'popular', mapMovie);
     }
 
     static async getNowPlaying() {
-        const all = await TmdbService.fetchPages(`${TMDB}/movie/now_playing?api_key=${API_KEY}&language=es-ES`, 7);
-        return all.map(mapMovie);
+        return await TmdbService.fetchPages(`${TMDB}/movie/now_playing?api_key=${API_KEY}&language=es-ES`, 7, 'now-playing', mapMovie);
     }
 
     static async getUpcoming() {
-        const all = await TmdbService.fetchPages(`${TMDB}/movie/upcoming?api_key=${API_KEY}&language=es-ES`, 7);
-        return all.map(mapMovie);
+        return await TmdbService.fetchPages(`${TMDB}/movie/upcoming?api_key=${API_KEY}&language=es-ES`, 7, 'upcoming', mapMovie);
     }
 
     static async getTopRated() {
-        const all = await TmdbService.fetchPages(`${TMDB}/movie/top_rated?api_key=${API_KEY}&language=es-ES`, 7);
-        return all.map(mapMovie);
+        return await TmdbService.fetchPages(`${TMDB}/movie/top_rated?api_key=${API_KEY}&language=es-ES`, 7, 'top-rated', mapMovie);
     }
 
     static async getPopularTv() {
-        const all = await TmdbService.fetchPages(`${TMDB}/tv/popular?api_key=${API_KEY}&language=es-ES`, 4);
-        return all.map(mapTv);
+        return await TmdbService.fetchPages(`${TMDB}/tv/popular?api_key=${API_KEY}&language=es-ES`, 4, 'popular', mapTv);
     }
 
     static async getAiringToday() {
-        const all = await TmdbService.fetchPages(`${TMDB}/tv/airing_today?api_key=${API_KEY}&language=es-ES`, 4);
-        return all.map(mapTv);
+        return await TmdbService.fetchPages(`${TMDB}/tv/airing_today?api_key=${API_KEY}&language=es-ES`, 4, 'airing-today', mapTv);
     }
 
     static async getOnTheAir() {
-        const all = await TmdbService.fetchPages(`${TMDB}/tv/on_the_air?api_key=${API_KEY}&language=es-ES`, 4);
-        return all.map(mapTv);
+        return await TmdbService.fetchPages(`${TMDB}/tv/on_the_air?api_key=${API_KEY}&language=es-ES`, 4, 'on-the-air', mapTv);
     }
 
     static async getTopRatedTv() {
-        const all = await TmdbService.fetchPages(`${TMDB}/tv/top_rated?api_key=${API_KEY}&language=es-ES`, 4);
-        return all.map(mapTv);
+        return await TmdbService.fetchPages(`${TMDB}/tv/top_rated?api_key=${API_KEY}&language=es-ES`, 4, 'top-rated', mapTv);
     }
 }
